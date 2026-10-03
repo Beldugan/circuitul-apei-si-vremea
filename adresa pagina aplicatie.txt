@@ -1,0 +1,11 @@
+De completat după urcarea pe GitHub.
+
+Nume sugerat pentru repository: circuitul-apei-si-vremea
+
+Adresa:
+https://github.com/Beldugan/circuitul-apei-si-vremea.git
+
+Pagina live (după Settings -> Pages):
+https://beldugan.github.io/circuitul-apei-si-vremea/
+
+Până atunci aplicația merge local: dublu-click pe index.html.
