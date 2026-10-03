@@ -4,7 +4,10 @@ Aplicație interactivă și materiale pentru **Lecția 39 — Circuitul apei și
 
 👉 **Live:** https://beldugan.github.io/circuitul-apei-si-vremea/
 
-## Cele trei module
+## Cele trei module și cele două lecții
+
+Modulele se deblochează pe rând: **1 · Circuitul apei → 📖 Lecția A + quiz → 2 · Fabrica de nori → 📖 Lecția B + quiz → 3 · Uragane și vremea**. Fiecare lecție are 5 cartonașe scurte (nivel Year 4 UK, cu cuvintele-cheie în engleză) și un quiz de 5 întrebări alese la întâmplare; trece cu minim **4 din 5 corecte din prima**. Progresul rămâne salvat în browser. Pentru profesor/părinte: în subsol, codul **39** deblochează tot sau resetează progresul.
+
 
 ### 1 · Circuitul apei
 
@@ -36,6 +39,8 @@ Un simulator de furtună tropicală cu condițiile reale de formare:
 - **emisfera** — se rotește invers la sud de ecuator
 
 Afișează viteza vântului, presiunea în hPa și categoria Saffir–Simpson, iar la peste 63 km/h furtuna primește un nume — exact ca în realitate.
+
+Pe aceeași hartă se poate alege orice fel de vreme — **senin, ploaie, furtună cu fulgere, ninsoare, grindină, ceață, vânt tare, uragan** — și se poate schimba **direcția vântului** (8 direcții) și viteza lui. Norii, ploaia, valurile, copacii și mâneca de vânt de lângă „orașul tău" se schimbă după vânt; ceața se risipește când bate vântul, ploaia devine ninsoare sub 0 °C, iar la furtună se numără secundele dintre fulger și tunet (3 s ≈ 1 km). Harta are **zoom** (＋/－, rotița mouse-ului, două degete pe tabletă), mutare prin tragere, mini-hartă și butonul 🎯 care urmărește furtuna.
 
 ## Ce e în repo
 

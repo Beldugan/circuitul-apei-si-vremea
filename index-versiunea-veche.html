@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circuitul apei și vremea</title>
+<style>
+  :root{ --green:#2fbf6b; --pink:#ff8fce; --red:#e23b3b; --blue:#2e79c9; --teal:#0e7c86; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:'Segoe UI',Verdana,sans-serif; color:#22303c;
+        background:linear-gradient(#e8f2fb,#fff8f2); min-height:100vh; }
+  header{ text-align:center; padding:14px 12px 2px; }
+  h1{ margin:0; font-size:25px; color:#1b5e9e; }
+  header p{ margin:6px 0 0; color:#5f7d92; font-size:14px; }
+  .wrap{ max-width:1060px; margin:0 auto; padding:8px 14px 40px; }
+  .tabs{ display:flex; gap:8px; justify-content:center; margin:10px 0 12px; flex-wrap:wrap; }
+  .tabs button{ font-size:15px; font-weight:800; padding:9px 16px; border-radius:12px;
+                border:2px solid #c2d8ea; background:#f5faff; color:#1b5e9e; cursor:pointer; }
+  .tabs button.on{ background:#1b5e9e; border-color:#124470; color:#fff; }
+  .stage{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; align-items:flex-start; }
+  canvas{ background:#fff; border-radius:16px; border:3px solid #c3dcf0; display:block; touch-action:none; }
+  .panel{ width:258px; }
+  .grp{ background:#fff; border:2px solid #d3e4f2; border-radius:14px; padding:8px 10px; margin-bottom:9px; }
+  .grp h3{ margin:0 0 6px; font-size:13px; color:#1b5e9e; text-transform:uppercase; letter-spacing:.4px; }
+  .row{ display:flex; gap:6px; margin-bottom:6px; }
+  .row:last-child{ margin-bottom:0; }
+  .row button{ flex:1; font-size:12.5px; font-weight:800; padding:8px 3px; border-radius:10px;
+               border:2px solid #c2d8ea; background:#f5faff; color:#1b5e9e; cursor:pointer; }
+  .row button.on{ background:#1b5e9e; border-color:#124470; color:#fff; }
+  .wide{ width:100%; font-size:14px; font-weight:800; padding:10px; border-radius:11px;
+         border:2px solid #e0a06a; background:#fff3e8; color:#a3410a; cursor:pointer; margin-bottom:6px; }
+  .wide.on{ background:var(--green); border-color:#1c8f4d; color:#fff; }
+  .wide.go{ background:var(--green); border-color:#1c8f4d; color:#fff; }
+  label{ display:block; font-size:12px; color:#5f7d92; font-weight:700; margin:7px 0 2px; }
+  input[type=range]{ width:100%; }
+  .reads{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:12px; }
+  .card{ background:#fff; border:2px solid #d3e4f2; border-radius:14px; padding:8px 12px; text-align:center; min-width:108px; }
+  .card b{ display:block; font-size:11px; color:#5f7d92; text-transform:uppercase; letter-spacing:.4px; }
+  .card span{ font-size:21px; font-weight:800; }
+  .msg{ text-align:center; font-weight:800; min-height:46px; margin-top:10px; font-size:15px;
+        color:#a3410a; padding:0 10px; line-height:1.45; }
+  footer{ text-align:center; color:#8aa5b9; font-size:12px; margin-top:16px; }
+  .hidden{ display:none !important; }
+  .legend{ font-size:11.5px; color:#5f7d92; line-height:1.6; }
+  .legend i{ display:inline-block; width:11px; height:11px; border-radius:50%; margin-right:5px; vertical-align:-1px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>💧 Circuitul apei și vremea</h1>
+  <p id="sub">Apa de pe Pământ nu se termină niciodată — doar se plimbă. Pornește soarele și urmărește-o.</p>
+</header>
+
+<div class="wrap">
+  <div class="tabs">
+    <button id="tab1" class="on">1 · Circuitul apei</button>
+    <button id="tab2">2 · Fabrica de nori</button>
+    <button id="tab3">3 · Uragane și taifunuri</button>
+  </div>
+
+  <!-- ================= MOD 1 — CIRCUITUL APEI ================= -->
+  <div id="mod1">
+    <div class="stage">
+      <canvas id="c1" width="640" height="430"></canvas>
+      <div class="panel">
+        <div class="grp">
+          <h3>Reglaje</h3>
+          <label>☀️ Puterea soarelui: <b id="lSun">60</b>%</label>
+          <input type="range" id="sSun" min="0" max="100" value="60">
+          <label>🌡️ Temperatura aerului: <b id="lTemp">22</b> °C</label>
+          <input type="range" id="sTemp" min="-10" max="35" value="22">
+          <label>💨 Vântul: <b id="lWind">5</b></label>
+          <input type="range" id="sWind" min="0" max="10" value="5">
+        </div>
+        <div class="grp">
+          <h3>Scenarii gata făcute</h3>
+          <div class="row"><button id="bSummer">Zi de vară</button><button id="bWinter">Iarnă</button></div>
+          <div class="row"><button id="bDesert">Deșert</button><button id="bStorm">Furtună</button></div>
+        </div>
+        <div class="grp">
+          <h3>Unde e apa acum</h3>
+          <div class="legend">
+            <i style="background:#2e79c9"></i>în mare și în râu<br>
+            <i style="background:#9ad4f5"></i>vapori (invizibili în realitate!)<br>
+            <i style="background:#c9d6de"></i>picături în nor<br>
+            <i style="background:#1b5e9e"></i>ploaie / zăpadă<br>
+            <i style="background:#7fa86a"></i>apă infiltrată în pământ
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reads">
+      <div class="card"><b>în mare</b><span id="r1sea" style="color:#2e79c9">0</span></div>
+      <div class="card"><b>în aer</b><span id="r1vap" style="color:#4f9ed6">0</span></div>
+      <div class="card"><b>în nor</b><span id="r1cloud" style="color:#5f7d92">0</span></div>
+      <div class="card"><b>pe uscat</b><span id="r1land" style="color:#2f7d4f">0</span></div>
+      <div class="card"><b>total</b><span id="r1tot" style="color:#a3410a">0</span></div>
+    </div>
+    <div class="msg" id="msg1">Numărul „total" nu se schimbă niciodată. Asta e toată ideea lecției.</div>
+  </div>
+
+  <!-- ================= MOD 2 — FABRICA DE NORI ================= -->
+  <div id="mod2" class="hidden">
+    <div class="stage">
+      <canvas id="c2" width="440" height="430"></canvas>
+      <div class="panel">
+        <div class="grp">
+          <h3>Ingredientele</h3>
+          <button class="wide" id="bWater">💧 Apă caldă în borcan: NU</button>
+          <button class="wide" id="bIce">🧊 Gheață pe capac: NU</button>
+          <button class="wide" id="bSmoke">💨 Puțin fum înăuntru: NU</button>
+        </div>
+        <div class="grp">
+          <h3>Experimentul</h3>
+          <button class="wide go" id="bRun">▶️ Închide capacul și așteaptă</button>
+          <button class="wide" id="bLid">🫙 Ridică capacul</button>
+          <button class="wide" id="bReset">↺ De la capăt</button>
+        </div>
+        <div class="grp">
+          <h3>Rețeta norului</h3>
+          <div class="legend">
+            Un nor are nevoie de <b>trei</b> lucruri, toate odată:<br>
+            1. <b>vapori de apă</b> (de la apa caldă)<br>
+            2. <b>răcire</b> (gheața de pe capac)<br>
+            3. <b>fire de praf</b> pe care să se prindă picăturile (fumul)<br>
+            Lipsește unul → nu se formează nimic.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reads">
+      <div class="card"><b>vapori</b><span id="r2vap" style="color:#4f9ed6">0%</span></div>
+      <div class="card"><b>temperatura sus</b><span id="r2top" style="color:#2e79c9">20°C</span></div>
+      <div class="card"><b>nuclee de condensare</b><span id="r2nuc" style="color:#a3410a">0</span></div>
+      <div class="card"><b>nor</b><span id="r2cloud" style="color:#5f7d92;font-size:17px">nu</span></div>
+    </div>
+    <div class="msg" id="msg2">Alege ingredientele, apoi apasă „Închide capacul și așteaptă".</div>
+  </div>
+
+  <!-- ================= MOD 3 — URAGANE ================= -->
+  <div id="mod3" class="hidden">
+    <div class="stage">
+      <canvas id="c3" width="640" height="450"></canvas>
+      <div class="panel">
+        <div class="grp">
+          <h3>Oceanul</h3>
+          <label>🌡️ Temperatura apei: <b id="lSst">28</b> °C</label>
+          <input type="range" id="sSst" min="22" max="32" step="0.5" value="28">
+          <label>🌬️ Forfecarea vântului (vânt care rupe furtuna)</label>
+          <div class="row">
+            <button id="bSh0" class="on">mică</button><button id="bSh1">medie</button><button id="bSh2">mare</button>
+          </div>
+        </div>
+        <div class="grp">
+          <h3>Unde se naște furtuna</h3>
+          <div class="row">
+            <button id="bAtl" class="on">Atlantic</button><button id="bPac">Pacific NV</button><button id="bInd">Oc. Indian</button>
+          </div>
+          <div class="row">
+            <button id="bNord" class="on">Emisfera nordică</button><button id="bSud">Sudică</button>
+          </div>
+        </div>
+        <div class="grp">
+          <button class="wide go" id="bNewStorm">🌀 Furtună nouă</button>
+          <div class="legend">Trage furtuna cu mouse-ul. Peste uscat se stinge, deasupra apei calde crește.</div>
+        </div>
+      </div>
+    </div>
+    <div class="reads">
+      <div class="card"><b>vânt</b><span id="r3wind" style="color:#e23b3b">30</span></div>
+      <div class="card"><b>presiune</b><span id="r3p" style="color:#1b5e9e">1008</span></div>
+      <div class="card"><b>categorie</b><span id="r3cat" style="color:#a3410a;font-size:16px">—</span></div>
+      <div class="card"><b>cum i se spune</b><span id="r3name" style="color:#0e7c86;font-size:16px">—</span></div>
+    </div>
+    <div class="msg" id="msg3">Apa trebuie să aibă peste 26,5 °C. Sub atât, furtuna nu are de unde să ia energie.</div>
+  </div>
+
+  <footer>Circuitul apei și vremea · Lecția 39 · Fizică Aplicată pentru Eva · apa de azi e aceeași cu apa dinozaurilor</footer>
+</div>
+
+<script>
+/* ============================================================
+   UTILITARE
+   ============================================================ */
+function rnd(a,b){ return a + Math.random()*(b-a); }
+function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+/* ============================================================
+   MOD 1 — CIRCUITUL APEI
+   Fiecare bulină = aceeași cantitate de apă. Numărul lor nu se
+   schimbă niciodată: apa doar trece dintr-o stare în alta.
+   ============================================================ */
+const c1 = document.getElementById('c1'), X1 = c1.getContext('2d');
+const SEA_X = 300, SEA_Y = 330, CLOUD_Y = 150;
+
+function groundY(x){
+  if(x <= SEA_X) return SEA_Y;
+  const t = clamp((x - SEA_X) / 300, 0, 1);
+  const s = t*t*(3 - 2*t);                 // pantă lină spre vârful muntelui
+  return SEA_Y - 165*s;
+}
+
+const S1 = { sun:60, temp:22, wind:5 };
+let drops = [];
+function initDrops(){
+  drops = [];
+  for(let i=0;i<300;i++){
+    drops.push({ x: rnd(10, SEA_X-10), y: rnd(SEA_Y+8, 420), st:'sea', vx:0, vy:0, age:0 });
+  }
+}
+initDrops();
+
+function capacity(){                        // câte picături ține norul până plouă
+  return 18 + Math.max(0, S1.temp) * 1.5;
+}
+
+function stepWater(){
+  const evapRate = (S1.sun/100) * (clamp(S1.temp,-10,35)+12)/47 * 0.030;
+  let cloudN = 0;
+  for(const d of drops) if(d.st==='cloud') cloudN++;
+  const cap = capacity();
+  const raining = cloudN > cap;
+
+  for(const d of drops){
+    if(d.st === 'sea'){
+      if(d.y < SEA_Y + 60 && Math.random() < evapRate){
+        d.st = 'vapor'; d.vy = -rnd(0.5, 1.1); d.vx = 0; d.y = SEA_Y - 2;
+      } else {
+        d.x += Math.sin((d.y + performance.now()/900))*0.12;
+        d.x = clamp(d.x, 6, SEA_X-6);
+      }
+    }
+    else if(d.st === 'vapor'){
+      d.y += d.vy;
+      d.x += S1.wind*0.16 + rnd(-0.3, 0.3);
+      if(d.y <= CLOUD_Y){ d.st = 'cloud'; d.age = 0; }
+      if(d.x > 630){ d.x = 630; }
+    }
+    else if(d.st === 'cloud'){
+      d.age++;
+      d.x += S1.wind*0.13 + rnd(-0.25,0.25);
+      d.y += rnd(-0.35,0.35);
+      d.y = clamp(d.y, 80, CLOUD_Y);
+      d.x = clamp(d.x, 60, 625);
+      if(raining && d.age > 40 && Math.random() < 0.05){
+        d.st = 'rain'; d.vy = (S1.temp <= 0) ? 1.0 : 2.6;
+      }
+    }
+    else if(d.st === 'rain'){
+      d.y += d.vy;
+      d.x += (S1.temp<=0 ? Math.sin(d.y/12)*0.8 : S1.wind*0.05);
+      const g = groundY(d.x);
+      if(d.x <= SEA_X && d.y >= SEA_Y){ d.st='sea'; d.y = rnd(SEA_Y+6, 415); }
+      else if(d.x > SEA_X && d.y >= g){
+        d.y = g - 2;
+        d.st = (Math.random() < 0.25) ? 'soil' : 'river';
+      }
+    }
+    else if(d.st === 'river'){
+      d.x -= 1.15;
+      d.y = groundY(d.x) - 2;
+      if(d.x <= SEA_X){ d.st='sea'; d.y = rnd(SEA_Y+6, 415); d.x = rnd(20, SEA_X-20); }
+    }
+    else if(d.st === 'soil'){
+      d.y += 0.12; d.x -= 0.22;
+      if(d.y > groundY(d.x) + 55) d.y = groundY(d.x) + 55;
+      if(d.x <= SEA_X){ d.st='sea'; d.y = rnd(SEA_Y+6, 415); d.x = rnd(20, SEA_X-20); }
+    }
+  }
+  return {cloudN, raining, cap};
+}
+
+function drawWater(info){
+  // cer
+  const sky = X1.createLinearGradient(0,0,0,SEA_Y);
+  sky.addColorStop(0, S1.sun>60 ? '#bfe3fb' : '#cfd9e2');
+  sky.addColorStop(1, '#eaf5fd');
+  X1.fillStyle = sky; X1.fillRect(0,0,640,430);
+
+  // soare
+  const sr = 16 + S1.sun*0.16;
+  X1.fillStyle = 'rgba(255,196,60,' + (0.35 + S1.sun/180) + ')';
+  X1.beginPath(); X1.arc(70, 62, sr+10, 0, 7); X1.fill();
+  X1.fillStyle = '#ffc43c'; X1.beginPath(); X1.arc(70, 62, sr, 0, 7); X1.fill();
+
+  // munte + uscat
+  X1.beginPath(); X1.moveTo(SEA_X, SEA_Y);
+  for(let x=SEA_X; x<=640; x+=4) X1.lineTo(x, groundY(x));
+  X1.lineTo(640, 430); X1.lineTo(SEA_X, 430); X1.closePath();
+  const gr = X1.createLinearGradient(0,150,0,430);
+  gr.addColorStop(0, '#8fae79'); gr.addColorStop(1, '#6d8f5c');
+  X1.fillStyle = gr; X1.fill();
+  if(S1.temp <= 2){                                    // zăpadă pe vârf
+    X1.beginPath(); X1.moveTo(560, groundY(560));
+    for(let x=560; x<=640; x+=4) X1.lineTo(x, groundY(x));
+    X1.lineTo(640, groundY(640)+16); X1.lineTo(560, groundY(560)+16); X1.closePath();
+    X1.fillStyle = '#f2f8fc'; X1.fill();
+  }
+  // mare
+  const sea = X1.createLinearGradient(0,SEA_Y,0,430);
+  sea.addColorStop(0, '#4f9ed6'); sea.addColorStop(1, '#1b5e9e');
+  X1.fillStyle = sea; X1.fillRect(0, SEA_Y, SEA_X, 430-SEA_Y);
+  X1.strokeStyle = '#8fd0f5'; X1.lineWidth = 2; X1.beginPath();
+  for(let x=0;x<SEA_X;x+=6){
+    const y = SEA_Y + Math.sin(x/22 + performance.now()/700)*2.2;
+    x===0 ? X1.moveTo(x,y) : X1.lineTo(x,y);
+  }
+  X1.stroke();
+
+  // norul (forma)
+  let cx=0, cy=0, n=0;
+  for(const d of drops) if(d.st==='cloud'){ cx+=d.x; cy+=d.y; n++; }
+  if(n > 6){
+    cx/=n; cy/=n;
+    const w = 40 + n*2.2, h = 22 + n*0.5;
+    const dark = clamp(n/info.cap, 0, 1);
+    X1.fillStyle = 'rgba(' + Math.round(250-70*dark) + ',' + Math.round(252-72*dark) + ',' + Math.round(255-70*dark) + ',0.93)';
+    for(const o of [[-w*0.5,4,h*0.75],[0,-6,h],[w*0.5,4,h*0.8],[-w*0.2,8,h*0.7],[w*0.22,8,h*0.7]]){
+      X1.beginPath(); X1.arc(clamp(cx+o[0],70,600), clamp(cy+o[1],85,CLOUD_Y), o[2], 0, 7); X1.fill();
+    }
+  }
+
+  // picăturile
+  for(const d of drops){
+    let col = '#2e79c9', r = 2.6;
+    if(d.st==='vapor'){ col = 'rgba(154,212,245,.95)'; r = 2.2; }
+    else if(d.st==='cloud'){ col = '#c9d6de'; r = 2.4; }
+    else if(d.st==='rain'){ col = S1.temp<=0 ? '#ffffff' : '#1b5e9e'; r = S1.temp<=0 ? 2.6 : 2.2; }
+    else if(d.st==='soil'){ col = '#7fa86a'; r = 2.4; }
+    else if(d.st==='river'){ col = '#2e79c9'; r = 2.6; }
+    X1.fillStyle = col;
+    if(d.st==='rain' && S1.temp>0){
+      X1.fillRect(d.x-0.9, d.y-4, 1.9, 8);
+    } else {
+      X1.beginPath(); X1.arc(d.x, d.y, r, 0, 7); X1.fill();
+    }
+  }
+
+  // etichete
+  X1.font = 'bold 12px Segoe UI'; X1.textAlign = 'center';
+  X1.fillStyle = '#1b5e9e';
+  X1.fillText('EVAPORARE ↑', 150, SEA_Y - 26);
+  X1.fillText('CONDENSARE', 330, 78);
+  if(info.raining) X1.fillText(S1.temp<=0 ? 'NINSOARE ↓' : 'PRECIPITAȚII ↓', 480, 196);
+  X1.fillStyle = '#2f5d3a';
+  X1.fillText('scurgere →', 470, groundY(470) + 26);
+  X1.fillText('infiltrare', 560, groundY(560) + 52);
+  X1.textAlign = 'left';
+  X1.fillStyle = '#5f7d92'; X1.font = 'bold 11px Segoe UI';
+  X1.fillText('mare', 10, SEA_Y + 18);
+}
+
+/* ============================================================
+   MOD 2 — FABRICA DE NORI (experimentul cu borcanul)
+   ============================================================ */
+const c2 = document.getElementById('c2'), X2 = c2.getContext('2d');
+const J = { water:false, ice:false, smoke:false, closed:false, t:0, cloud:0, lidOff:false };
+let puffs = [];
+
+function resetJar(keepIngredients){
+  J.closed = false; J.t = 0; J.cloud = 0; J.lidOff = false;
+  puffs = [];
+  if(!keepIngredients){ J.water = J.ice = J.smoke = false; syncJarButtons(); }
+  document.getElementById('msg2').textContent = 'Alege ingredientele, apoi apasă „Închide capacul și așteaptă".';
+}
+function syncJarButtons(){
+  const b1 = document.getElementById('bWater'), b2 = document.getElementById('bIce'), b3 = document.getElementById('bSmoke');
+  b1.textContent = '💧 Apă caldă în borcan: ' + (J.water?'DA':'NU'); b1.classList.toggle('on', J.water);
+  b2.textContent = '🧊 Gheață pe capac: '   + (J.ice?'DA':'NU');   b2.classList.toggle('on', J.ice);
+  b3.textContent = '💨 Puțin fum înăuntru: ' + (J.smoke?'DA':'NU'); b3.classList.toggle('on', J.smoke);
+}
+
+function stepJar(){
+  if(!J.closed) return;
+  J.t++;
+  const vap = J.water ? clamp(J.t/70, 0, 1) : 0;
+  const cold = J.ice ? clamp(J.t/60, 0, 1) : 0;
+  const ok = J.water && J.ice && J.smoke;
+  if(ok) J.cloud = clamp(J.cloud + 0.012, 0, 1);
+  else   J.cloud = clamp(J.cloud - 0.02, 0, 1);
+
+  if(J.cloud > 0.04 && puffs.length < 90 && Math.random() < 0.5){
+    puffs.push({x: rnd(126,300), y: rnd(118,252), r: rnd(11,24), vx: rnd(-0.25,0.25), vy: rnd(-0.18,0.18), a: rnd(0.45,0.9)});
+  }
+  for(const p of puffs){
+    p.x += p.vx + (J.lidOff ? 0 : 0); p.y += p.vy;
+    if(J.lidOff){ p.y -= 1.6; p.a -= 0.012; }
+    if(p.x < 122 || p.x > 304) p.vx *= -1;
+    if(p.y < 115 || p.y > 255) p.vy *= -1;
+  }
+  puffs = puffs.filter(p => p.a > 0.02);
+
+  // mesaje
+  const m = document.getElementById('msg2');
+  if(J.t === 90){
+    if(ok) m.textContent = '☁️ S-a format norul! Vaporii s-au răcit și s-au lipit de firele de fum. Exact asta se întâmplă pe cer.';
+    else if(!J.water) m.textContent = '❌ Fără apă caldă nu există vapori. Nu ai din ce să faci norul.';
+    else if(!J.ice) m.textContent = '❌ Fără gheață, aerul de sus rămâne cald. Vaporii calzi nu se transformă în picături — nu apare nimic.';
+    else if(!J.smoke) m.textContent = '❌ Ai vapori și ai răcire, dar nu ai de ce să se prindă picăturile. Fără fire de praf, norul aproape că nu se vede.';
+  }
+  return {vap, cold};
+}
+
+function drawJar(){
+  X2.clearRect(0,0,440,430);
+  X2.fillStyle = '#f7fbff'; X2.fillRect(0,0,440,430);
+
+  const vap = J.closed && J.water ? clamp(J.t/70,0,1) : (J.water?0.25:0);
+  const topT = J.ice ? Math.round(20 - 16*clamp(J.t/60,0,1)) : 20;
+
+  // cartonul negru din spate — fara el norul nu se vede nici in realitate
+  X2.fillStyle = '#1d2e3d';
+  X2.beginPath(); X2.roundRect(96, 72, 236, 300, 10); X2.fill();
+  X2.fillStyle = 'rgba(255,255,255,.35)'; X2.font = 'bold 10px Segoe UI'; X2.textAlign = 'center';
+  X2.fillText('carton negru în spate', 214, 366);
+
+  // borcanul
+  X2.fillStyle = 'rgba(180,215,235,.18)';
+  X2.strokeStyle = '#9fc4dd'; X2.lineWidth = 4;
+  X2.beginPath(); X2.roundRect(116, 95, 196, 250, 16); X2.fill(); X2.stroke();
+
+  // apa calda si aburul care urca
+  if(J.water){
+    X2.fillStyle = '#2e79c9';
+    X2.beginPath(); X2.roundRect(120, 300, 188, 41, [0,0,12,12]); X2.fill();
+    X2.fillStyle = 'rgba(255,255,255,.35)';
+    for(let i=0;i<4;i++){
+      const y = 296 - ((performance.now()/9 + i*40) % 130);
+      X2.beginPath(); X2.ellipse(146+i*44, y, 6, 11, 0, 0, 7); X2.fill();
+    }
+    X2.fillStyle = '#ffd9a8'; X2.font = 'bold 11px Segoe UI'; X2.textAlign='center';
+    X2.fillText('apă caldă (abur ↑)', 214, 325);
+  }
+
+  // norul
+  for(const p of puffs){
+    X2.fillStyle = 'rgba(244,249,253,' + p.a + ')';
+    X2.beginPath(); X2.arc(p.x, p.y, p.r, 0, 7); X2.fill();
+  }
+
+  // fumul = nuclee de condensare
+  if(J.smoke){
+    X2.fillStyle = 'rgba(210,210,210,.55)';
+    for(let i=0;i<18;i++){
+      const x = 128 + ((i*37 + performance.now()/40) % 172);
+      const y = 126 + ((i*53 + performance.now()/55) % 165);
+      X2.beginPath(); X2.arc(x, y, 1.7, 0, 7); X2.fill();
+    }
+  }
+
+  // capacul si gheata
+  const lidY = J.lidOff ? 52 : 80;
+  X2.fillStyle = J.closed && !J.lidOff ? '#9aa7b1' : '#c6d2db';
+  X2.fillRect(108, lidY, 212, 16);
+  X2.strokeStyle = '#6b7a86'; X2.lineWidth = 2; X2.strokeRect(108, lidY, 212, 16);
+  if(J.ice){
+    X2.fillStyle = '#d8f0fb'; X2.strokeStyle = '#8ec8e8'; X2.lineWidth = 2;
+    for(let i=0;i<4;i++){
+      X2.beginPath(); X2.roundRect(128 + i*46, lidY - 25, 34, 23, 5); X2.fill(); X2.stroke();
+    }
+    X2.fillStyle = '#1b5e9e'; X2.font = 'bold 11px Segoe UI'; X2.textAlign='center';
+    X2.fillText('gheață — răcește aerul de sus', 214, lidY - 33);
+  }
+
+  // temperaturile
+  X2.textAlign = 'left'; X2.font = 'bold 12px Segoe UI';
+  X2.fillStyle = '#2e79c9'; X2.fillText('sus: ' + topT + '°C', 344, 140);
+  X2.fillStyle = '#a3410a'; X2.fillText('jos: ' + (J.water? '45' : '20') + '°C', 344, 300);
+  X2.strokeStyle = '#c3dcf0'; X2.lineWidth = 2;
+  X2.beginPath(); X2.moveTo(360, 150); X2.lineTo(360, 288); X2.stroke();
+  X2.beginPath(); X2.moveTo(356, 282); X2.lineTo(360, 290); X2.lineTo(364, 282); X2.stroke();
+  X2.fillStyle = '#5f7d92'; X2.font = '11px Segoe UI';
+  X2.fillText('diferența', 368, 205);
+  X2.fillText('de', 368, 219);
+  X2.fillText('temperatură', 368, 233);
+  X2.fillText('e motorul', 368, 247);
+  X2.fillText('norului', 368, 261);
+
+  // citiri
+  document.getElementById('r2vap').textContent  = Math.round(vap*100) + '%';
+  document.getElementById('r2top').textContent  = topT + '°C';
+  document.getElementById('r2nuc').textContent  = J.smoke ? 'multe' : '0';
+  const cl = document.getElementById('r2cloud');
+  cl.textContent = J.cloud > 0.5 ? 'DA ☁️' : (J.cloud > 0.1 ? 'slab' : 'nu');
+  cl.style.color = J.cloud > 0.5 ? '#2fbf6b' : '#5f7d92';
+}
+
+/* ============================================================
+   MOD 3 — URAGANE, TAIFUNURI, CICLONI
+   ============================================================ */
+const c3 = document.getElementById('c3'), X3 = c3.getContext('2d');
+const EQ = 372;                                    // linia ecuatorului pe hartă
+const H = { x:500, y:250, v:35, sst:28, shear:0, hemi:1, basin:'atl', rot:0, trail:[], drag:false, named:null };
+const NAMES = ['Ana','Bianca','Carla','Dorin','Elena','Florin','Gina','Horia','Irina','Jana'];
+
+function overLand(x,y){
+  return (x < 118 && y < 330) || (y > 408);
+}
+
+function stepStorm(){
+  // deplasare naturală: spre vest, ușor spre pol
+  if(!H.drag){
+    H.x -= 0.28;
+    H.y -= 0.12 * H.hemi;
+    if(H.x < 20) H.x = 20;
+  }
+  const land = overLand(H.x, H.y);
+  const nearEq = Math.abs(H.y - EQ) < 42;
+  // spre ce viteza tinde furtuna, in conditiile de acum
+  let target = (H.sst - 26.5) * 65 - H.shear * 45;
+  if(land)   target -= 220;
+  if(nearEq) target -= 160;
+  target = clamp(target, 12, 300);
+  H.v += (target - H.v) * ((land || nearEq) ? 0.02 : 0.006);
+  H.v = clamp(H.v, 12, 300);
+  H.rot += 0.02 + H.v/4200;
+  if(H.v > 63 && !H.named) H.named = NAMES[Math.floor(Math.random()*NAMES.length)];
+  H.trail.push({x:H.x, y:H.y});
+  if(H.trail.length > 420) H.trail.shift();
+  return {land, nearEq};
+}
+
+function category(v){
+  if(v < 63)  return {t:'depresiune tropicală', c:'#7fa86a'};
+  if(v < 119) return {t:'furtună tropicală', c:'#d1a33a'};
+  if(v < 154) return {t:'categoria 1', c:'#e0a06a'};
+  if(v < 178) return {t:'categoria 2', c:'#e08a3a'};
+  if(v < 209) return {t:'categoria 3', c:'#e2683b'};
+  if(v < 252) return {t:'categoria 4', c:'#e23b3b'};
+  return {t:'categoria 5', c:'#a3155b'};
+}
+function basinName(){
+  if(H.basin==='atl') return 'URAGAN';
+  if(H.basin==='pac') return 'TAIFUN';
+  return 'CICLON';
+}
+
+function drawStorm(info){
+  // ocean, colorat după temperatură
+  const warm = clamp((H.sst - 22) / 10, 0, 1);
+  const g = X3.createLinearGradient(0,0,0,450);
+  g.addColorStop(0, '#17457a');
+  g.addColorStop(1, 'rgb(' + Math.round(20+70*warm) + ',' + Math.round(110+40*warm) + ',' + Math.round(175-30*warm) + ')');
+  X3.fillStyle = g; X3.fillRect(0,0,640,450);
+
+  // uscat
+  X3.fillStyle = '#6d8f5c';
+  X3.beginPath(); X3.moveTo(0,0); X3.lineTo(118,0); X3.lineTo(100,120);
+  X3.lineTo(118,230); X3.lineTo(70,330); X3.lineTo(0,330); X3.closePath(); X3.fill();
+  X3.fillRect(0, 408, 640, 42);
+  X3.fillStyle = '#4f6e42'; X3.font = 'bold 12px Segoe UI'; X3.textAlign='left';
+  X3.fillText('USCAT', 14, 60); X3.fillText('USCAT', 14, 432);
+
+  // ecuator
+  X3.strokeStyle = 'rgba(255,255,255,.55)'; X3.lineWidth = 2; X3.setLineDash([10,7]);
+  X3.beginPath(); X3.moveTo(0, EQ); X3.lineTo(640, EQ); X3.stroke(); X3.setLineDash([]);
+  X3.fillStyle = 'rgba(255,255,255,.75)'; X3.font = 'bold 11px Segoe UI'; X3.textAlign='right';
+  X3.fillText('ECUATOR — aici furtunile nu se pot roti', 632, EQ - 7);
+
+  // traseu
+  if(H.trail.length > 1){
+    X3.strokeStyle = 'rgba(255,255,255,.45)'; X3.lineWidth = 2; X3.setLineDash([5,5]);
+    X3.beginPath(); X3.moveTo(H.trail[0].x, H.trail[0].y);
+    for(const t of H.trail) X3.lineTo(t.x, t.y);
+    X3.stroke(); X3.setLineDash([]);
+  }
+
+  // furtuna
+  const cat = category(H.v);
+  const R = 26 + H.v*0.26;
+  X3.save(); X3.translate(H.x, H.y); X3.rotate(H.rot * (H.hemi>0 ? -1 : 1));
+  X3.fillStyle = 'rgba(255,255,255,.14)';
+  X3.beginPath(); X3.arc(0,0,R*1.12,0,7); X3.fill();
+  for(let b=0;b<5;b++){
+    X3.beginPath();
+    for(let t=0.18;t<1;t+=0.03){
+      const a = b*Math.PI*2/5 + t*3.1*(H.hemi>0?1:-1);
+      const r = R*t;
+      const x = Math.cos(a)*r, y = Math.sin(a)*r;
+      t===0.18 ? X3.moveTo(x,y) : X3.lineTo(x,y);
+    }
+    X3.strokeStyle = 'rgba(255,255,255,' + (0.35 + H.v/700) + ')';
+    X3.lineWidth = 4 + H.v/70; X3.lineCap = 'round'; X3.stroke();
+  }
+  if(H.v >= 119){                                  // ochiul se vede doar la uragan adevărat
+    X3.fillStyle = 'rgba(30,70,110,.95)';
+    X3.beginPath(); X3.arc(0,0,R*0.16,0,7); X3.fill();
+  }
+  X3.restore();
+
+  // săgeata sensului de rotație
+  X3.fillStyle = cat.c; X3.font = 'bold 13px Segoe UI'; X3.textAlign='center';
+  X3.fillText(H.hemi>0 ? '↺ invers acelor de ceas' : '↻ în sensul acelor de ceas', H.x, H.y + R + 20);
+  if(H.named && H.v > 63){
+    X3.fillStyle = '#fff'; X3.font = 'bold 15px Segoe UI';
+    X3.fillText(basinName() + 'UL ' + H.named.toUpperCase(), H.x, H.y - R - 12);
+  }
+
+  // scala de temperatură
+  X3.textAlign='left'; X3.font='bold 12px Segoe UI'; X3.fillStyle='#fff';
+  X3.fillText('apa: ' + H.sst.toFixed(1) + ' °C', 500, 28);
+  X3.fillStyle = H.sst >= 26.5 ? '#9ff0bf' : '#ffc9c9'; X3.font='bold 11px Segoe UI';
+  X3.fillText(H.sst >= 26.5 ? 'destul de caldă ✔' : 'prea rece ✘', 500, 44);
+
+  // citiri + mesaj
+  document.getElementById('r3wind').textContent = Math.round(H.v) + ' km/h';
+  document.getElementById('r3p').textContent    = Math.round(1010 - 0.0016*H.v*H.v) + ' hPa';
+  const rc = document.getElementById('r3cat'); rc.textContent = cat.t; rc.style.color = cat.c;
+  document.getElementById('r3name').textContent = H.v >= 119 ? basinName() : '—';
+
+  const m = document.getElementById('msg3');
+  if(info.land) m.textContent = '🏝️ Furtuna a ajuns deasupra uscatului. Nu mai are apă caldă din care să ia energie — slăbește repede. De asta uraganele se sting la câteva zile după ce ating țărmul.';
+  else if(info.nearEq) m.textContent = '🌍 Prea aproape de ecuator. Acolo rotația Pământului nu reușește să învârtă aerul, așa că uraganele nu se nasc niciodată chiar pe ecuator.';
+  else if(H.sst < 26.5) m.textContent = '🌡️ Apa are sub 26,5 °C. Fără apă caldă nu există evaporare puternică, deci furtuna nu are combustibil.';
+  else if(H.shear >= 2) m.textContent = '🌬️ Forfecare mare: vântul de la înălțime rupe vârful furtunii și nu o lasă să se organizeze.';
+  else if(H.v >= 252) m.textContent = '🌀 Categoria 5. Vânt de peste 252 km/h — în realitate smulge acoperișuri întregi și inundă coasta cu valul de furtună.';
+  else if(H.v >= 119) m.textContent = '🌀 E ' + basinName().toLowerCase() + ' în toată regula: peste 119 km/h și cu ochi la mijloc. În ochi e liniște și se vede cerul.';
+  else if(H.v >= 63) m.textContent = '🌬️ Furtună tropicală — exact acum primește un nume: ' + (H.named||'…') + '. Până aici era doar „depresiune tropicală", cu număr.';
+  else m.textContent = 'Depresiune tropicală. Are nevoie de apă peste 26,5 °C, de forfecare mică și de timp.';
+}
+
+/* ============================================================
+   BUCLA + COMENZI
+   ============================================================ */
+let active = 1;
+function loop(){
+  if(active === 1){
+    const info = stepWater();
+    drawWater(info);
+    let s=0,v=0,c=0,l=0;
+    for(const d of drops){
+      if(d.st==='sea') s++;
+      else if(d.st==='vapor') v++;
+      else if(d.st==='cloud') c++;
+      else if(d.st==='rain') v++;
+      else l++;
+    }
+    document.getElementById('r1sea').textContent   = s;
+    document.getElementById('r1vap').textContent   = v;
+    document.getElementById('r1cloud').textContent = c;
+    document.getElementById('r1land').textContent  = l;
+    document.getElementById('r1tot').textContent   = drops.length;
+    const m1 = document.getElementById('msg1');
+    if(S1.sun < 10) m1.textContent = '🌑 Fără soare nu există evaporare. Soarele e motorul întregului circuit — el ridică apa înapoi în cer.';
+    else if(S1.temp <= 0) m1.textContent = '❄️ Sub zero grade, apa cade ca zăpadă și rămâne pe munte. Primăvara se topește și pornește din nou la vale.';
+    else if(info.raining) m1.textContent = '🌧️ Plouă! Norul s-a umplut: picăturile s-au unit până au devenit prea grele ca să mai plutească.';
+    else if(c > info.cap*0.7) m1.textContent = '☁️ Norul se îngroașă și se întunecă. Încă puțin și începe ploaia.';
+    else m1.textContent = 'Numărul „total" nu se schimbă niciodată. Apa nu se pierde și nu se fabrică — doar își schimbă locul și forma.';
+  } else if(active === 2){
+    stepJar(); drawJar();
+  } else {
+    const info = stepStorm(); drawStorm(info);
+  }
+  requestAnimationFrame(loop);
+}
+
+/* --- mod 1 --- */
+const bind = (id, lbl, key, f) => {
+  const el = document.getElementById(id);
+  el.oninput = () => { S1[key] = +el.value; document.getElementById(lbl).textContent = el.value; if(f) f(); };
+};
+bind('sSun','lSun','sun'); bind('sTemp','lTemp','temp'); bind('sWind','lWind','wind');
+function preset(sun, temp, wind){
+  S1.sun=sun; S1.temp=temp; S1.wind=wind;
+  document.getElementById('sSun').value=sun;  document.getElementById('lSun').textContent=sun;
+  document.getElementById('sTemp').value=temp;document.getElementById('lTemp').textContent=temp;
+  document.getElementById('sWind').value=wind;document.getElementById('lWind').textContent=wind;
+}
+document.getElementById('bSummer').onclick = ()=>preset(95, 30, 4);
+document.getElementById('bWinter').onclick = ()=>preset(30, -5, 4);
+document.getElementById('bDesert').onclick = ()=>preset(100, 35, 8);
+document.getElementById('bStorm').onclick  = ()=>preset(70, 18, 10);
+
+/* --- mod 2 --- */
+document.getElementById('bWater').onclick = ()=>{ if(!J.closed){ J.water=!J.water; syncJarButtons(); } };
+document.getElementById('bIce').onclick   = ()=>{ if(!J.closed){ J.ice=!J.ice;     syncJarButtons(); } };
+document.getElementById('bSmoke').onclick = ()=>{ if(!J.closed){ J.smoke=!J.smoke; syncJarButtons(); } };
+document.getElementById('bRun').onclick = ()=>{
+  J.closed = true; J.t = 0; J.lidOff = false;
+  document.getElementById('msg2').textContent = '⏳ Capacul e pus. Aerul de sus se răcește… urmărește borcanul.';
+};
+document.getElementById('bLid').onclick = ()=>{
+  if(!J.closed) return;
+  J.lidOff = true;
+  document.getElementById('msg2').textContent = '💨 Norul iese din borcan și se destramă — aerul din cameră e cald și uscat, picăturile se evaporă la loc.';
+};
+document.getElementById('bReset').onclick = ()=>resetJar(true);
+syncJarButtons();
+
+/* --- mod 3 --- */
+document.getElementById('sSst').oninput = function(){
+  H.sst = +this.value; document.getElementById('lSst').textContent = (+this.value).toFixed(1);
+};
+function shearBtn(id, val){
+  document.getElementById(id).onclick = function(){
+    H.shear = val;
+    ['bSh0','bSh1','bSh2'].forEach(i=>document.getElementById(i).classList.remove('on'));
+    this.classList.add('on');
+  };
+}
+shearBtn('bSh0',0); shearBtn('bSh1',1); shearBtn('bSh2',2.5);
+function basinBtn(id, val){
+  document.getElementById(id).onclick = function(){
+    H.basin = val;
+    ['bAtl','bPac','bInd'].forEach(i=>document.getElementById(i).classList.remove('on'));
+    this.classList.add('on');
+  };
+}
+basinBtn('bAtl','atl'); basinBtn('bPac','pac'); basinBtn('bInd','ind');
+function hemiBtn(id, val){
+  document.getElementById(id).onclick = function(){
+    H.hemi = val;
+    ['bNord','bSud'].forEach(i=>document.getElementById(i).classList.remove('on'));
+    this.classList.add('on');
+    H.y = val>0 ? 250 : 430; H.trail = [];
+    if(val<0) H.y = EQ + 55;
+  };
+}
+hemiBtn('bNord',1); hemiBtn('bSud',-1);
+document.getElementById('bNewStorm').onclick = ()=>{
+  H.x = 560; H.y = H.hemi>0 ? 250 : EQ+55; H.v = 35; H.trail = []; H.named = null;
+};
+function p3(e){
+  const r = c3.getBoundingClientRect(), t = e.touches ? e.touches[0] : e;
+  return {x:(t.clientX-r.left)*640/r.width, y:(t.clientY-r.top)*450/r.height};
+}
+c3.addEventListener('mousedown', e=>{ const p=p3(e); if(Math.hypot(p.x-H.x,p.y-H.y)<70){ H.drag=true; e.preventDefault(); } });
+c3.addEventListener('touchstart', e=>{ const p=p3(e); if(Math.hypot(p.x-H.x,p.y-H.y)<70){ H.drag=true; e.preventDefault(); } }, {passive:false});
+window.addEventListener('mousemove', e=>{ if(H.drag){ const p=p3(e); H.x=clamp(p.x,20,620); H.y=clamp(p.y,20,440); } });
+window.addEventListener('touchmove', e=>{ if(H.drag){ const p=p3(e); H.x=clamp(p.x,20,620); H.y=clamp(p.y,20,440); e.preventDefault(); } }, {passive:false});
+window.addEventListener('mouseup', ()=>{ H.drag=false; });
+window.addEventListener('touchend', ()=>{ H.drag=false; });
+
+/* --- taburi --- */
+const TABS = [
+  {b:'tab1', m:'mod1', s:'Apa de pe Pământ nu se termină niciodată — doar se plimbă. Pornește soarele și urmărește-o.'},
+  {b:'tab2', m:'mod2', s:'Trei ingrediente fac un nor. Încearcă toate combinațiile și vezi care merge.'},
+  {b:'tab3', m:'mod3', s:'Aceeași furtună are trei nume, după locul în care se naște. Hrănește-o cu apă caldă.'}
+];
+TABS.forEach((t, i)=>{
+  document.getElementById(t.b).onclick = ()=>{
+    active = i+1;
+    TABS.forEach(o=>{
+      document.getElementById(o.b).classList.remove('on');
+      document.getElementById(o.m).classList.add('hidden');
+    });
+    document.getElementById(t.b).classList.add('on');
+    document.getElementById(t.m).classList.remove('hidden');
+    document.getElementById('sub').textContent = t.s;
+  };
+});
+
+loop();
+</script>
+</body>
+</html>

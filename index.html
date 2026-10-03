@@ -13,12 +13,17 @@
   h1{ margin:0; font-size:25px; color:#1b5e9e; }
   header p{ margin:6px 0 0; color:#5f7d92; font-size:14px; }
   .wrap{ max-width:1060px; margin:0 auto; padding:8px 14px 40px; }
-  .tabs{ display:flex; gap:8px; justify-content:center; margin:10px 0 12px; flex-wrap:wrap; }
-  .tabs button{ font-size:15px; font-weight:800; padding:9px 16px; border-radius:12px;
+  .tabs{ display:flex; gap:7px; justify-content:center; margin:10px 0 6px; flex-wrap:wrap; }
+  .tabs button{ font-size:14.5px; font-weight:800; padding:9px 14px; border-radius:12px;
                 border:2px solid #c2d8ea; background:#f5faff; color:#1b5e9e; cursor:pointer; }
   .tabs button.on{ background:#1b5e9e; border-color:#124470; color:#fff; }
+  .tabs button.lesson{ border-color:#f0c48a; background:#fff8ee; color:#a3410a; }
+  .tabs button.lesson.on{ background:#e08a3a; border-color:#a3410a; color:#fff; }
+  .tabs button.lock{ opacity:.5; cursor:not-allowed; }
+  .tabs button.done::after{ content:' ✅'; }
+  .lockmsg{ text-align:center; font-weight:800; color:#a3410a; min-height:22px; font-size:14px; margin-bottom:6px; }
   .stage{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; align-items:flex-start; }
-  canvas{ background:#fff; border-radius:16px; border:3px solid #c3dcf0; display:block; touch-action:none; }
+  canvas{ background:#fff; border-radius:16px; border:3px solid #c3dcf0; display:block; touch-action:none; max-width:100%; height:auto; }
   .panel{ width:258px; }
   .grp{ background:#fff; border:2px solid #d3e4f2; border-radius:14px; padding:8px 10px; margin-bottom:9px; }
   .grp h3{ margin:0 0 6px; font-size:13px; color:#1b5e9e; text-transform:uppercase; letter-spacing:.4px; }
@@ -40,9 +45,74 @@
   .msg{ text-align:center; font-weight:800; min-height:46px; margin-top:10px; font-size:15px;
         color:#a3410a; padding:0 10px; line-height:1.45; }
   footer{ text-align:center; color:#8aa5b9; font-size:12px; margin-top:16px; }
+  footer details{ margin-top:8px; }
+  footer summary{ cursor:pointer; }
+  footer input{ width:90px; padding:4px; border-radius:6px; border:1px solid #c2d8ea; }
+  footer button{ padding:4px 9px; border-radius:6px; border:1px solid #c2d8ea; background:#f5faff; cursor:pointer; margin:2px; }
   .hidden{ display:none !important; }
   .legend{ font-size:11.5px; color:#5f7d92; line-height:1.6; }
   .legend i{ display:inline-block; width:11px; height:11px; border-radius:50%; margin-right:5px; vertical-align:-1px; }
+
+  /* ---------- lecții + quiz ---------- */
+  .lesson{ max-width:740px; margin:0 auto; background:#fff; border:3px solid #f0c48a; border-radius:22px; padding:20px 26px 22px; }
+  .lesson .top{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+  .lesson .kicker{ font-size:13px; font-weight:800; color:#a3410a; text-transform:uppercase; letter-spacing:.5px; }
+  .lesson .big{ font-size:58px; text-align:center; margin:8px 0 2px; letter-spacing:6px; }
+  .lesson h2{ text-align:center; color:#1b5e9e; margin:4px 0 10px; font-size:26px; }
+  .lesson p{ font-size:18px; line-height:1.6; margin:9px 0; }
+  .lesson ul{ font-size:18px; line-height:1.7; margin:6px 0; }
+  .chips{ display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+  .chips span{ background:#eef6fd; border:2px solid #c2d8ea; border-radius:20px; padding:4px 11px; font-size:14px; }
+  .chips span b{ color:#1b5e9e; }
+  .nav{ display:flex; justify-content:space-between; align-items:center; margin-top:18px; gap:8px; flex-wrap:wrap; }
+  @media (max-width:560px){ .lesson{ padding:16px 14px; } .lesson p{ font-size:16.5px; } .q{ font-size:18px; } }
+  .nav button, .btn{ font-size:16px; font-weight:800; padding:11px 18px; border-radius:12px; border:2px solid #c2d8ea;
+                     background:#f5faff; color:#1b5e9e; cursor:pointer; }
+  .btn.go, .nav button.go{ background:var(--green); border-color:#1c8f4d; color:#fff; }
+  .btn.orange{ background:#e08a3a; border-color:#a3410a; color:#fff; }
+  .nav button:disabled{ opacity:.35; cursor:default; }
+  .dots{ display:flex; gap:6px; }
+  .dots i{ width:11px; height:11px; border-radius:50%; background:#d3e4f2; display:block; }
+  .dots i.on{ background:#e08a3a; }
+  .say{ font-size:13px; padding:6px 11px; border-radius:10px; border:2px solid #c2d8ea; background:#f5faff; color:#1b5e9e; cursor:pointer; font-weight:700; }
+  .cycle{ display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:6px; margin:12px 0; font-weight:800; font-size:15px; }
+  .cycle span{ background:#eef6fd; border-radius:12px; padding:7px 10px; border:2px solid #c2d8ea; }
+  .cycle em{ font-style:normal; color:#e08a3a; font-size:20px; }
+  .q{ font-size:21px; font-weight:800; color:#22303c; margin:12px 0 14px; line-height:1.4; }
+  .qopt{ display:block; width:100%; text-align:left; font-size:18px; font-weight:700; padding:13px 16px; margin-bottom:9px;
+         border-radius:14px; border:3px solid #c2d8ea; background:#f8fbff; color:#22303c; cursor:pointer; }
+  .qopt:hover:not(:disabled){ border-color:#1b5e9e; }
+  .qopt.ok{ background:#dff7e8; border-color:#2fbf6b; }
+  .qopt.bad{ background:#fde3e3; border-color:#e23b3b; text-decoration:line-through; }
+  .qopt:disabled{ cursor:default; }
+  .fb{ font-size:17px; line-height:1.5; border-radius:14px; padding:10px 14px; margin-top:6px; }
+  .fb.ok{ background:#eafaf0; color:#1c6e3f; }
+  .fb.bad{ background:#fff3e8; color:#a3410a; }
+  .result{ text-align:center; }
+  .stars{ font-size:44px; letter-spacing:4px; margin:8px 0; }
+  .burst{ position:fixed; left:50%; top:40%; font-size:34px; pointer-events:none; animation:fly 1.4s ease-out forwards; }
+  @keyframes fly{ to{ transform:translate(var(--dx),var(--dy)) rotate(360deg); opacity:0; } }
+
+  /* ---------- harta din modul 3 ---------- */
+  .mapbox{ position:relative; }
+  .zoom{ position:absolute; right:12px; bottom:12px; display:flex; flex-direction:column; gap:6px; }
+  .zoom button{ width:42px; height:42px; font-size:22px; font-weight:800; border-radius:12px; border:2px solid #124470;
+                background:rgba(255,255,255,.92); color:#1b5e9e; cursor:pointer; line-height:1; }
+  .zoom button.on{ background:#1b5e9e; color:#fff; }
+  .zlbl{ position:absolute; right:62px; bottom:16px; background:rgba(255,255,255,.85); border-radius:8px; padding:3px 8px;
+         font-size:12px; font-weight:800; color:#1b5e9e; }
+  .ph{ display:grid; grid-template-columns:repeat(4,1fr); gap:5px; }
+  .ph button{ font-size:10.5px; font-weight:800; padding:5px 1px 4px; border-radius:10px; border:2px solid #c2d8ea;
+              background:#f5faff; color:#1b5e9e; cursor:pointer; }
+  .ph button .em{ display:block; font-size:21px; line-height:1.2; }
+  .ph button.on{ background:#1b5e9e; border-color:#124470; color:#fff; }
+  .compass{ display:grid; grid-template-columns:repeat(3,44px); gap:4px; justify-content:center; margin:4px 0 2px; }
+  .compass button{ height:36px; font-size:18px; font-weight:800; border-radius:10px; border:2px solid #c2d8ea;
+                   background:#f5faff; color:#1b5e9e; cursor:pointer; padding:0; line-height:1; }
+  .compass button small{ display:block; font-size:9px; }
+  .compass button.on{ background:#1b5e9e; border-color:#124470; color:#fff; }
+  .compass .mid{ display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .wtxt{ text-align:center; font-size:12px; font-weight:800; color:#1b5e9e; margin-top:3px; }
 </style>
 </head>
 <body>
@@ -54,9 +124,12 @@
 <div class="wrap">
   <div class="tabs">
     <button id="tab1" class="on">1 · Circuitul apei</button>
+    <button id="tabA" class="lesson">📖 Lecția A + quiz</button>
     <button id="tab2">2 · Fabrica de nori</button>
-    <button id="tab3">3 · Uragane și taifunuri</button>
+    <button id="tabB" class="lesson">📖 Lecția B + quiz</button>
+    <button id="tab3">3 · Uragane și vremea</button>
   </div>
+  <div class="lockmsg" id="lockmsg"></div>
 
   <!-- ================= MOD 1 — CIRCUITUL APEI ================= -->
   <div id="mod1">
@@ -69,8 +142,9 @@
           <input type="range" id="sSun" min="0" max="100" value="60">
           <label>🌡️ Temperatura aerului: <b id="lTemp">22</b> °C</label>
           <input type="range" id="sTemp" min="-10" max="35" value="22">
-          <label>💨 Vântul: <b id="lWind">5</b></label>
-          <input type="range" id="sWind" min="0" max="10" value="5">
+          <label>💨 Vântul: <b id="lWind">5 → spre munte</b></label>
+          <input type="range" id="sWind" min="-10" max="10" value="5">
+          <div class="legend" style="display:flex;justify-content:space-between"><span>← spre mare</span><span>calm</span><span>spre munte →</span></div>
         </div>
         <div class="grp">
           <h3>Scenarii gata făcute</h3>
@@ -87,6 +161,7 @@
             <i style="background:#7fa86a"></i>apă infiltrată în pământ
           </div>
         </div>
+        <button class="wide go" id="goA">📖 Gata? Mergi la Lecția A →</button>
       </div>
     </div>
     <div class="reads">
@@ -98,6 +173,9 @@
     </div>
     <div class="msg" id="msg1">Numărul „total" nu se schimbă niciodată. Asta e toată ideea lecției.</div>
   </div>
+
+  <!-- ================= LECȚIA A ================= -->
+  <div id="modA" class="hidden"><div class="lesson" id="lessonA"></div></div>
 
   <!-- ================= MOD 2 — FABRICA DE NORI ================= -->
   <div id="mod2" class="hidden">
@@ -126,6 +204,7 @@
             Lipsește unul → nu se formează nimic.
           </div>
         </div>
+        <button class="wide go" id="goB">📖 Gata? Mergi la Lecția B →</button>
       </div>
     </div>
     <div class="reads">
@@ -137,12 +216,59 @@
     <div class="msg" id="msg2">Alege ingredientele, apoi apasă „Închide capacul și așteaptă".</div>
   </div>
 
-  <!-- ================= MOD 3 — URAGANE ================= -->
+  <!-- ================= LECȚIA B ================= -->
+  <div id="modB" class="hidden"><div class="lesson" id="lessonB"></div></div>
+
+  <!-- ================= MOD 3 — URAGANE ȘI VREMEA ================= -->
   <div id="mod3" class="hidden">
     <div class="stage">
-      <canvas id="c3" width="640" height="450"></canvas>
+      <div class="mapbox">
+        <canvas id="c3" width="640" height="450"></canvas>
+        <div class="zoom">
+          <button id="zIn" title="Mărește (zoom in)">＋</button>
+          <button id="zOut" title="Micșorează (zoom out)">－</button>
+          <button id="zReset" title="Toată harta">⟲</button>
+          <button id="zFollow" title="Urmărește furtuna">🎯</button>
+        </div>
+        <div class="zlbl" id="zLbl">zoom 1×</div>
+      </div>
       <div class="panel">
         <div class="grp">
+          <h3>Alege vremea</h3>
+          <div class="ph" id="phBox">
+            <button data-ph="senin"><span class="em">☀️</span>senin</button>
+            <button data-ph="ploaie"><span class="em">🌧️</span>ploaie</button>
+            <button data-ph="furtuna"><span class="em">⛈️</span>furtună</button>
+            <button data-ph="ninsoare"><span class="em">🌨️</span>ninsoare</button>
+            <button data-ph="grindina"><span class="em">🧊</span>grindină</button>
+            <button data-ph="ceata"><span class="em">🌫️</span>ceață</button>
+            <button data-ph="vant"><span class="em">💨</span>vânt tare</button>
+            <button data-ph="uragan" class="on"><span class="em">🌀</span>uragan</button>
+          </div>
+        </div>
+        <div class="grp">
+          <h3>Vântul — de unde bate?</h3>
+          <div class="compass" id="compass">
+            <button data-d="315">↘<small>NV</small></button>
+            <button data-d="0">↓<small>N</small></button>
+            <button data-d="45">↙<small>NE</small></button>
+            <button data-d="270">→<small>V</small></button>
+            <div class="mid">🧭</div>
+            <button data-d="90">←<small>E</small></button>
+            <button data-d="225">↗<small>SV</small></button>
+            <button data-d="180">↑<small>S</small></button>
+            <button data-d="135">↖<small>SE</small></button>
+          </div>
+          <div class="wtxt" id="wTxt">dinspre est → spre vest</div>
+          <label>💨 Viteza vântului: <b id="lWs">25</b> km/h</label>
+          <input type="range" id="sWs" min="0" max="150" value="25">
+        </div>
+        <div class="grp" id="gAir">
+          <h3>Aerul</h3>
+          <label>🌡️ Temperatura aerului: <b id="lTa">12</b> °C</label>
+          <input type="range" id="sTa" min="-10" max="35" value="12">
+        </div>
+        <div class="grp" id="gHur">
           <h3>Oceanul</h3>
           <label>🌡️ Temperatura apei: <b id="lSst">28</b> °C</label>
           <input type="range" id="sSst" min="22" max="32" step="0.5" value="28">
@@ -150,32 +276,37 @@
           <div class="row">
             <button id="bSh0" class="on">mică</button><button id="bSh1">medie</button><button id="bSh2">mare</button>
           </div>
-        </div>
-        <div class="grp">
-          <h3>Unde se naște furtuna</h3>
+          <label>Unde se naște furtuna</label>
           <div class="row">
             <button id="bAtl" class="on">Atlantic</button><button id="bPac">Pacific NV</button><button id="bInd">Oc. Indian</button>
           </div>
           <div class="row">
             <button id="bNord" class="on">Emisfera nordică</button><button id="bSud">Sudică</button>
           </div>
+          <button class="wide go" id="bNewStorm" style="margin-top:6px">🌀 Furtună nouă</button>
         </div>
-        <div class="grp">
-          <button class="wide go" id="bNewStorm">🌀 Furtună nouă</button>
-          <div class="legend">Trage furtuna cu mouse-ul. Peste uscat se stinge, deasupra apei calde crește.</div>
-        </div>
+        <div class="legend" id="dragHint">Trage furtuna sau norii cu mouse-ul. Rotița mouse-ului sau ＋/－ fac zoom; când ești mărit, trage harta ca s-o muți.</div>
       </div>
     </div>
     <div class="reads">
-      <div class="card"><b>vânt</b><span id="r3wind" style="color:#e23b3b">30</span></div>
-      <div class="card"><b>presiune</b><span id="r3p" style="color:#1b5e9e">1008</span></div>
-      <div class="card"><b>categorie</b><span id="r3cat" style="color:#a3410a;font-size:16px">—</span></div>
-      <div class="card"><b>cum i se spune</b><span id="r3name" style="color:#0e7c86;font-size:16px">—</span></div>
+      <div class="card"><b id="k0">vânt</b><span id="v0" style="color:#e23b3b">—</span></div>
+      <div class="card"><b id="k1">presiune</b><span id="v1" style="color:#1b5e9e">—</span></div>
+      <div class="card"><b id="k2">categorie</b><span id="v2" style="color:#a3410a;font-size:16px">—</span></div>
+      <div class="card"><b id="k3">cum i se spune</b><span id="v3" style="color:#0e7c86;font-size:16px">—</span></div>
+      <div class="card"><b id="k4">🏠 în oraș</b><span id="v4" style="color:#22303c;font-size:16px">—</span></div>
     </div>
     <div class="msg" id="msg3">Apa trebuie să aibă peste 26,5 °C. Sub atât, furtuna nu are de unde să ia energie.</div>
   </div>
 
-  <footer>Circuitul apei și vremea · Lecția 39 · Fizică Aplicată pentru Eva · apa de azi e aceeași cu apa dinozaurilor</footer>
+  <footer>Circuitul apei și vremea · Lecția 39 · Fizică Aplicată pentru Eva · apa de azi e aceeași cu apa dinozaurilor
+    <details>
+      <summary>Pentru profesor / părinte</summary>
+      Cod: <input id="tCode" type="password" autocomplete="off">
+      <button id="tUnlock">🔓 Deblochează tot</button>
+      <button id="tReset">↺ Resetează progresul</button>
+      <div id="tMsg"></div>
+    </details>
+  </footer>
 </div>
 
 <script>
@@ -184,19 +315,28 @@
    ============================================================ */
 function rnd(a,b){ return a + Math.random()*(b-a); }
 function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+const $ = id => document.getElementById(id);
+
+/* ============================================================
+   PROGRES — ce lecții au fost trecute (salvat în browser)
+   ============================================================ */
+const P = { A:false, B:false };
+try{ Object.assign(P, JSON.parse(localStorage.getItem('ca39_progres') || '{}')); }catch(e){}
+function saveP(){ try{ localStorage.setItem('ca39_progres', JSON.stringify(P)); }catch(e){} }
 
 /* ============================================================
    MOD 1 — CIRCUITUL APEI
    Fiecare bulină = aceeași cantitate de apă. Numărul lor nu se
    schimbă niciodată: apa doar trece dintr-o stare în alta.
    ============================================================ */
-const c1 = document.getElementById('c1'), X1 = c1.getContext('2d');
+const c1 = $('c1'), X1 = c1.getContext('2d');
 const SEA_X = 300, SEA_Y = 330, CLOUD_Y = 150;
 
 function groundY(x){
   if(x <= SEA_X) return SEA_Y;
   const t = clamp((x - SEA_X) / 300, 0, 1);
-  const s = t*t*(3 - 2*t);                 // pantă lină spre vârful muntelui
+  const s = t*t*(3 - 2*t);
   return SEA_Y - 165*s;
 }
 
@@ -210,9 +350,7 @@ function initDrops(){
 }
 initDrops();
 
-function capacity(){                        // câte picături ține norul până plouă
-  return 18 + Math.max(0, S1.temp) * 1.5;
-}
+function capacity(){ return 18 + Math.max(0, S1.temp) * 1.5; }
 
 function stepWater(){
   const evapRate = (S1.sun/100) * (clamp(S1.temp,-10,35)+12)/47 * 0.030;
@@ -234,14 +372,16 @@ function stepWater(){
       d.y += d.vy;
       d.x += S1.wind*0.16 + rnd(-0.3, 0.3);
       if(d.y <= CLOUD_Y){ d.st = 'cloud'; d.age = 0; }
-      if(d.x > 630){ d.x = 630; }
+      if(d.x < 40) d.x += rnd(0, 1.5);                 // vântul spre mare nu-i poate scoate din hartă
+      d.x = clamp(d.x, 6, 630);
     }
     else if(d.st === 'cloud'){
       d.age++;
       d.x += S1.wind*0.13 + rnd(-0.25,0.25);
       d.y += rnd(-0.35,0.35);
       d.y = clamp(d.y, 80, CLOUD_Y);
-      d.x = clamp(d.x, 60, 625);
+      if(d.x < 110) d.x += rnd(0, 1.4);
+      d.x = clamp(d.x, 40, 625);
       if(raining && d.age > 40 && Math.random() < 0.05){
         d.st = 'rain'; d.vy = (S1.temp <= 0) ? 1.0 : 2.6;
       }
@@ -271,32 +411,28 @@ function stepWater(){
 }
 
 function drawWater(info){
-  // cer
   const sky = X1.createLinearGradient(0,0,0,SEA_Y);
   sky.addColorStop(0, S1.sun>60 ? '#bfe3fb' : '#cfd9e2');
   sky.addColorStop(1, '#eaf5fd');
   X1.fillStyle = sky; X1.fillRect(0,0,640,430);
 
-  // soare
   const sr = 16 + S1.sun*0.16;
   X1.fillStyle = 'rgba(255,196,60,' + (0.35 + S1.sun/180) + ')';
   X1.beginPath(); X1.arc(70, 62, sr+10, 0, 7); X1.fill();
   X1.fillStyle = '#ffc43c'; X1.beginPath(); X1.arc(70, 62, sr, 0, 7); X1.fill();
 
-  // munte + uscat
   X1.beginPath(); X1.moveTo(SEA_X, SEA_Y);
   for(let x=SEA_X; x<=640; x+=4) X1.lineTo(x, groundY(x));
   X1.lineTo(640, 430); X1.lineTo(SEA_X, 430); X1.closePath();
   const gr = X1.createLinearGradient(0,150,0,430);
   gr.addColorStop(0, '#8fae79'); gr.addColorStop(1, '#6d8f5c');
   X1.fillStyle = gr; X1.fill();
-  if(S1.temp <= 2){                                    // zăpadă pe vârf
+  if(S1.temp <= 2){
     X1.beginPath(); X1.moveTo(560, groundY(560));
     for(let x=560; x<=640; x+=4) X1.lineTo(x, groundY(x));
     X1.lineTo(640, groundY(640)+16); X1.lineTo(560, groundY(560)+16); X1.closePath();
     X1.fillStyle = '#f2f8fc'; X1.fill();
   }
-  // mare
   const sea = X1.createLinearGradient(0,SEA_Y,0,430);
   sea.addColorStop(0, '#4f9ed6'); sea.addColorStop(1, '#1b5e9e');
   X1.fillStyle = sea; X1.fillRect(0, SEA_Y, SEA_X, 430-SEA_Y);
@@ -307,7 +443,6 @@ function drawWater(info){
   }
   X1.stroke();
 
-  // norul (forma)
   let cx=0, cy=0, n=0;
   for(const d of drops) if(d.st==='cloud'){ cx+=d.x; cy+=d.y; n++; }
   if(n > 6){
@@ -316,11 +451,10 @@ function drawWater(info){
     const dark = clamp(n/info.cap, 0, 1);
     X1.fillStyle = 'rgba(' + Math.round(250-70*dark) + ',' + Math.round(252-72*dark) + ',' + Math.round(255-70*dark) + ',0.93)';
     for(const o of [[-w*0.5,4,h*0.75],[0,-6,h],[w*0.5,4,h*0.8],[-w*0.2,8,h*0.7],[w*0.22,8,h*0.7]]){
-      X1.beginPath(); X1.arc(clamp(cx+o[0],70,600), clamp(cy+o[1],85,CLOUD_Y), o[2], 0, 7); X1.fill();
+      X1.beginPath(); X1.arc(clamp(cx+o[0],50,600), clamp(cy+o[1],85,CLOUD_Y), o[2], 0, 7); X1.fill();
     }
   }
 
-  // picăturile
   for(const d of drops){
     let col = '#2e79c9', r = 2.6;
     if(d.st==='vapor'){ col = 'rgba(154,212,245,.95)'; r = 2.2; }
@@ -336,12 +470,22 @@ function drawWater(info){
     }
   }
 
-  // etichete
+  // săgeata vântului
+  if(S1.wind !== 0){
+    const dir = Math.sign(S1.wind), L = 18 + Math.abs(S1.wind)*5, y0 = 30, x0 = 330;
+    X1.strokeStyle = '#5f7d92'; X1.lineWidth = 3; X1.beginPath();
+    X1.moveTo(x0 - dir*L/2, y0); X1.lineTo(x0 + dir*L/2, y0); X1.stroke();
+    X1.beginPath(); X1.moveTo(x0 + dir*L/2, y0); X1.lineTo(x0 + dir*(L/2-8), y0-6); X1.lineTo(x0 + dir*(L/2-8), y0+6); X1.closePath();
+    X1.fillStyle = '#5f7d92'; X1.fill();
+    X1.font = 'bold 11px Segoe UI'; X1.textAlign = 'center';
+    X1.fillText('vânt', x0, y0 - 9);
+  }
+
   X1.font = 'bold 12px Segoe UI'; X1.textAlign = 'center';
   X1.fillStyle = '#1b5e9e';
   X1.fillText('EVAPORARE ↑', 150, SEA_Y - 26);
   X1.fillText('CONDENSARE', 330, 78);
-  if(info.raining) X1.fillText(S1.temp<=0 ? 'NINSOARE ↓' : 'PRECIPITAȚII ↓', 480, 196);
+  if(info.raining) X1.fillText(S1.temp<=0 ? 'NINSOARE ↓' : 'PRECIPITAȚII ↓', S1.wind < -2 ? 150 : 480, 196);
   X1.fillStyle = '#2f5d3a';
   X1.fillText('scurgere →', 470, groundY(470) + 26);
   X1.fillText('infiltrare', 560, groundY(560) + 52);
@@ -353,7 +497,7 @@ function drawWater(info){
 /* ============================================================
    MOD 2 — FABRICA DE NORI (experimentul cu borcanul)
    ============================================================ */
-const c2 = document.getElementById('c2'), X2 = c2.getContext('2d');
+const c2 = $('c2'), X2 = c2.getContext('2d');
 const J = { water:false, ice:false, smoke:false, closed:false, t:0, cloud:0, lidOff:false };
 let puffs = [];
 
@@ -361,10 +505,10 @@ function resetJar(keepIngredients){
   J.closed = false; J.t = 0; J.cloud = 0; J.lidOff = false;
   puffs = [];
   if(!keepIngredients){ J.water = J.ice = J.smoke = false; syncJarButtons(); }
-  document.getElementById('msg2').textContent = 'Alege ingredientele, apoi apasă „Închide capacul și așteaptă".';
+  $('msg2').textContent = 'Alege ingredientele, apoi apasă „Închide capacul și așteaptă".';
 }
 function syncJarButtons(){
-  const b1 = document.getElementById('bWater'), b2 = document.getElementById('bIce'), b3 = document.getElementById('bSmoke');
+  const b1 = $('bWater'), b2 = $('bIce'), b3 = $('bSmoke');
   b1.textContent = '💧 Apă caldă în borcan: ' + (J.water?'DA':'NU'); b1.classList.toggle('on', J.water);
   b2.textContent = '🧊 Gheață pe capac: '   + (J.ice?'DA':'NU');   b2.classList.toggle('on', J.ice);
   b3.textContent = '💨 Puțin fum înăuntru: ' + (J.smoke?'DA':'NU'); b3.classList.toggle('on', J.smoke);
@@ -373,8 +517,6 @@ function syncJarButtons(){
 function stepJar(){
   if(!J.closed) return;
   J.t++;
-  const vap = J.water ? clamp(J.t/70, 0, 1) : 0;
-  const cold = J.ice ? clamp(J.t/60, 0, 1) : 0;
   const ok = J.water && J.ice && J.smoke;
   if(ok) J.cloud = clamp(J.cloud + 0.012, 0, 1);
   else   J.cloud = clamp(J.cloud - 0.02, 0, 1);
@@ -383,22 +525,20 @@ function stepJar(){
     puffs.push({x: rnd(126,300), y: rnd(118,252), r: rnd(11,24), vx: rnd(-0.25,0.25), vy: rnd(-0.18,0.18), a: rnd(0.45,0.9)});
   }
   for(const p of puffs){
-    p.x += p.vx + (J.lidOff ? 0 : 0); p.y += p.vy;
+    p.x += p.vx; p.y += p.vy;
     if(J.lidOff){ p.y -= 1.6; p.a -= 0.012; }
     if(p.x < 122 || p.x > 304) p.vx *= -1;
     if(p.y < 115 || p.y > 255) p.vy *= -1;
   }
   puffs = puffs.filter(p => p.a > 0.02);
 
-  // mesaje
-  const m = document.getElementById('msg2');
+  const m = $('msg2');
   if(J.t === 90){
     if(ok) m.textContent = '☁️ S-a format norul! Vaporii s-au răcit și s-au lipit de firele de fum. Exact asta se întâmplă pe cer.';
     else if(!J.water) m.textContent = '❌ Fără apă caldă nu există vapori. Nu ai din ce să faci norul.';
     else if(!J.ice) m.textContent = '❌ Fără gheață, aerul de sus rămâne cald. Vaporii calzi nu se transformă în picături — nu apare nimic.';
     else if(!J.smoke) m.textContent = '❌ Ai vapori și ai răcire, dar nu ai de ce să se prindă picăturile. Fără fire de praf, norul aproape că nu se vede.';
   }
-  return {vap, cold};
 }
 
 function drawJar(){
@@ -408,18 +548,15 @@ function drawJar(){
   const vap = J.closed && J.water ? clamp(J.t/70,0,1) : (J.water?0.25:0);
   const topT = J.ice ? Math.round(20 - 16*clamp(J.t/60,0,1)) : 20;
 
-  // cartonul negru din spate — fara el norul nu se vede nici in realitate
   X2.fillStyle = '#1d2e3d';
   X2.beginPath(); X2.roundRect(96, 72, 236, 300, 10); X2.fill();
   X2.fillStyle = 'rgba(255,255,255,.35)'; X2.font = 'bold 10px Segoe UI'; X2.textAlign = 'center';
   X2.fillText('carton negru în spate', 214, 366);
 
-  // borcanul
   X2.fillStyle = 'rgba(180,215,235,.18)';
   X2.strokeStyle = '#9fc4dd'; X2.lineWidth = 4;
   X2.beginPath(); X2.roundRect(116, 95, 196, 250, 16); X2.fill(); X2.stroke();
 
-  // apa calda si aburul care urca
   if(J.water){
     X2.fillStyle = '#2e79c9';
     X2.beginPath(); X2.roundRect(120, 300, 188, 41, [0,0,12,12]); X2.fill();
@@ -432,13 +569,11 @@ function drawJar(){
     X2.fillText('apă caldă (abur ↑)', 214, 325);
   }
 
-  // norul
   for(const p of puffs){
     X2.fillStyle = 'rgba(244,249,253,' + p.a + ')';
     X2.beginPath(); X2.arc(p.x, p.y, p.r, 0, 7); X2.fill();
   }
 
-  // fumul = nuclee de condensare
   if(J.smoke){
     X2.fillStyle = 'rgba(210,210,210,.55)';
     for(let i=0;i<18;i++){
@@ -448,7 +583,6 @@ function drawJar(){
     }
   }
 
-  // capacul si gheata
   const lidY = J.lidOff ? 52 : 80;
   X2.fillStyle = J.closed && !J.lidOff ? '#9aa7b1' : '#c6d2db';
   X2.fillRect(108, lidY, 212, 16);
@@ -462,7 +596,6 @@ function drawJar(){
     X2.fillText('gheață — răcește aerul de sus', 214, lidY - 33);
   }
 
-  // temperaturile
   X2.textAlign = 'left'; X2.font = 'bold 12px Segoe UI';
   X2.fillStyle = '#2e79c9'; X2.fillText('sus: ' + topT + '°C', 344, 140);
   X2.fillStyle = '#a3410a'; X2.fillText('jos: ' + (J.water? '45' : '20') + '°C', 344, 300);
@@ -470,44 +603,93 @@ function drawJar(){
   X2.beginPath(); X2.moveTo(360, 150); X2.lineTo(360, 288); X2.stroke();
   X2.beginPath(); X2.moveTo(356, 282); X2.lineTo(360, 290); X2.lineTo(364, 282); X2.stroke();
   X2.fillStyle = '#5f7d92'; X2.font = '11px Segoe UI';
-  X2.fillText('diferența', 368, 205);
-  X2.fillText('de', 368, 219);
-  X2.fillText('temperatură', 368, 233);
-  X2.fillText('e motorul', 368, 247);
-  X2.fillText('norului', 368, 261);
+  ['diferența','de','temperatură','e motorul','norului'].forEach((t,i)=>X2.fillText(t, 368, 205 + i*14));
 
-  // citiri
-  document.getElementById('r2vap').textContent  = Math.round(vap*100) + '%';
-  document.getElementById('r2top').textContent  = topT + '°C';
-  document.getElementById('r2nuc').textContent  = J.smoke ? 'multe' : '0';
-  const cl = document.getElementById('r2cloud');
+  $('r2vap').textContent  = Math.round(vap*100) + '%';
+  $('r2top').textContent  = topT + '°C';
+  $('r2nuc').textContent  = J.smoke ? 'multe' : '0';
+  const cl = $('r2cloud');
   cl.textContent = J.cloud > 0.5 ? 'DA ☁️' : (J.cloud > 0.1 ? 'slab' : 'nu');
   cl.style.color = J.cloud > 0.5 ? '#2fbf6b' : '#5f7d92';
 }
 
 /* ============================================================
-   MOD 3 — URAGANE, TAIFUNURI, CICLONI
+   MOD 3 — HARTA VREMII: URAGANE, PLOAIE, FURTUNĂ, VÂNT...
+   Hartă văzută de sus. Lumea are 640×450; camera poate face zoom.
    ============================================================ */
-const c3 = document.getElementById('c3'), X3 = c3.getContext('2d');
-const EQ = 372;                                    // linia ecuatorului pe hartă
-const H = { x:500, y:250, v:35, sst:28, shear:0, hemi:1, basin:'atl', rot:0, trail:[], drag:false, named:null };
+const c3 = $('c3'), X3 = c3.getContext('2d');
+const WW = 640, WH = 450, EQ = 330;
+const CAM = { z:1, x:WW/2, y:WH/2, follow:false };
+const WIND = { dir:90, spd:25 };                       // dir = DE UNDE bate (0 = nord, 90 = est...)
+const DIRN = {0:'nord',45:'nord-est',90:'est',135:'sud-est',180:'sud',225:'sud-vest',270:'vest',315:'nord-vest'};
+const TOWN = { x:60, y:178 };
+const LANDPOLY = [[0,0],[118,0],[100,120],[118,230],[70,300],[0,300]];
+const TREES = [[34,58],[84,92],[28,128],[40,232],[46,272],[50,430],[140,428],[215,434]];
+const H = { x:500, y:230, v:35, sst:28, shear:0, hemi:1, basin:'atl', rot:0, trail:[], drag:false, named:null };
 const NAMES = ['Ana','Bianca','Carla','Dorin','Elena','Florin','Gina','Horia','Irina','Jana'];
+const WX = { ph:'uragan', ta:12, fog:0, sys:{x:380,y:190,r:105}, dragSys:false,
+             puffs:[], parts:[], streaks:[], cumuli:[], bolts:[], flash:0, thunder:null, t:0 };
 
-function overLand(x,y){
-  return (x < 118 && y < 330) || (y > 408);
+for(let i=0;i<34;i++){
+  const a = rnd(0,6.283), d = Math.sqrt(Math.random())*0.8;
+  WX.puffs.push({dx:Math.cos(a)*d, dy:Math.sin(a)*d*0.85, r:rnd(0.17,0.3), w:rnd(0,6)});
+}
+for(let i=0;i<130;i++) WX.streaks.push({x:rnd(0,WW), y:rnd(0,WH), l:rnd(0.6,1.4)});
+for(let i=0;i<8;i++) WX.cumuli.push({x:rnd(0,WW), y:rnd(20,WH-40), s:rnd(0.7,1.2)});
+
+function inPoly(x,y,poly){
+  let ins=false;
+  for(let i=0,j=poly.length-1;i<poly.length;j=i++){
+    const [xi,yi]=poly[i],[xj,yj]=poly[j];
+    if(((yi>y)!==(yj>y)) && (x < (xj-xi)*(y-yi)/(yj-yi)+xi)) ins=!ins;
+  }
+  return ins;
+}
+function overLand(x,y){ return inPoly(x,y,LANDPOLY) || (y > 410 && x < 260); }
+function wvec(){ const a = (WIND.dir+180)*Math.PI/180; return {x:Math.sin(a), y:-Math.cos(a)}; }
+function beaufort(s){
+  const lim=[1,6,12,20,29,39,50,62,75,89,103,118];
+  let b=0; while(b<12 && s>=lim[b]) b++;
+  const d=['calm — fumul urcă drept','adiere ușoară','frunzele foșnesc','steagurile flutură','zboară hârtii și praf',
+           'copăceii se clatină','umbrela se ține greu','copacii întregi se mișcă','se rup crengi','zboară țigle de pe case',
+           'copaci smulși din rădăcini','pagube foarte mari','forță de uragan!'];
+  return {b, d:d[b]};
+}
+function hasSystem(){ return ['ploaie','furtuna','ninsoare','grindina'].includes(WX.ph); }
+function precipKind(){
+  if(WX.ph==='grindina') return 'hail';
+  if(!hasSystem()) return null;
+  if(WX.ta <= 0) return 'snow';
+  if(WX.ta <= 3) return 'sleet';
+  return 'rain';
 }
 
+/* --- camera --- */
+function clampCam(){
+  const hw = WW/2/CAM.z, hh = WH/2/CAM.z;
+  CAM.x = clamp(CAM.x, hw, WW-hw); CAM.y = clamp(CAM.y, hh, WH-hh);
+}
+function toWorld(sx,sy){ return {x:(sx-WW/2)/CAM.z + CAM.x, y:(sy-WH/2)/CAM.z + CAM.y}; }
+function zoomAt(sx, sy, f){
+  const w = toWorld(sx,sy);
+  CAM.z = clamp(CAM.z*f, 1, 5);
+  CAM.x = w.x - (sx-WW/2)/CAM.z; CAM.y = w.y - (sy-WH/2)/CAM.z;
+  clampCam();
+  $('zLbl').textContent = 'zoom ' + (Math.round(CAM.z*10)/10).toString().replace('.',',') + '×';
+}
+
+/* --- pas de simulare --- */
 function stepStorm(){
-  // deplasare naturală: spre vest, ușor spre pol
+  const v = wvec(), s = WIND.spd;
   if(!H.drag){
-    H.x -= 0.28;
-    H.y -= 0.12 * H.hemi;
-    if(H.x < 20) H.x = 20;
+    H.x += v.x*s*0.011;
+    H.y += v.y*s*0.011 - 0.10*H.hemi;
+    H.x = clamp(H.x, 20, WW-20); H.y = clamp(H.y, 20, WH-20);
   }
   const land = overLand(H.x, H.y);
   const nearEq = Math.abs(H.y - EQ) < 42;
-  // spre ce viteza tinde furtuna, in conditiile de acum
-  let target = (H.sst - 26.5) * 65 - H.shear * 45;
+  const shearEff = H.shear + Math.max(0, (s-70)/35);
+  let target = (H.sst - 26.5) * 65 - shearEff * 45;
   if(land)   target -= 220;
   if(nearEq) target -= 160;
   target = clamp(target, 12, 300);
@@ -517,7 +699,225 @@ function stepStorm(){
   if(H.v > 63 && !H.named) H.named = NAMES[Math.floor(Math.random()*NAMES.length)];
   H.trail.push({x:H.x, y:H.y});
   if(H.trail.length > 420) H.trail.shift();
-  return {land, nearEq};
+  return {land, nearEq, shearEff};
+}
+
+function stepWX(){
+  WX.t++;
+  const v = wvec(), s = WIND.spd, S = WX.sys;
+  // sistemul de nori merge cu vântul și reintră pe partea cealaltă a hărții
+  if(hasSystem() && !WX.dragSys){
+    S.x += v.x*s*0.012; S.y += v.y*s*0.012;
+    const m = S.r + 10;
+    if(S.x < -m) S.x = WW+m; if(S.x > WW+m) S.x = -m;
+    if(S.y < -m) S.y = WH+m; if(S.y > WH+m) S.y = -m;
+  }
+  for(const c of WX.cumuli){
+    c.x += v.x*s*0.014; c.y += v.y*s*0.014;
+    if(c.x < -40) c.x = WW+40; if(c.x > WW+40) c.x = -40;
+    if(c.y < -40) c.y = WH+40; if(c.y > WH+40) c.y = -40;
+  }
+  for(const k of WX.streaks){
+    k.x += v.x*s*0.05*k.l; k.y += v.y*s*0.05*k.l;
+    if(k.x < 0) k.x += WW; if(k.x > WW) k.x -= WW;
+    if(k.y < 0) k.y += WH; if(k.y > WH) k.y -= WH;
+  }
+  // ceața: apare când aerul e liniștit, vântul o risipește
+  const fogT = WX.ph==='ceata' ? clamp(1 - s/25, 0, 1) : 0;
+  WX.fog += (fogT - WX.fog) * 0.02;
+
+  // precipitații
+  const kind = precipKind();
+  if(kind){
+    const n = {rain:7, sleet:6, snow:4, hail:4}[kind] + (WX.ph==='furtuna' ? 4 : 0);
+    for(let i=0;i<n;i++){
+      const a = rnd(0,6.283), d = Math.sqrt(Math.random())*S.r*0.78;
+      let k = kind;
+      if(kind==='sleet') k = Math.random()<0.5 ? 'snow' : 'rain';
+      if(kind==='hail' && Math.random()<0.5) k = 'rain';
+      WX.parts.push({x:S.x+Math.cos(a)*d, y:S.y+Math.sin(a)*d*0.85, k, life: k==='snow'?40:22, w:rnd(0,6)});
+    }
+  }
+  const fall = {rain:3.2, snow:0.7, hail:4.2};
+  for(const p of WX.parts){
+    p.life--;
+    p.x += v.x*s*(p.k==='snow'?0.05:0.03) + (p.k==='snow' ? Math.sin(p.w + p.life/5)*0.5 : 0);
+    p.y += fall[p.k] + v.y*s*0.03;
+  }
+  WX.parts = WX.parts.filter(p => p.life > 0);
+  if(WX.parts.length > 1400) WX.parts.splice(0, WX.parts.length-1400);
+
+  // fulgere
+  WX.flash *= 0.85;
+  for(const b of WX.bolts) b.life--;
+  WX.bolts = WX.bolts.filter(b => b.life > 0);
+  if((WX.ph==='furtuna' || WX.ph==='grindina') && Math.random() < 0.012){
+    const a = rnd(0,6.283), d = Math.sqrt(Math.random())*S.r*0.6;
+    let x = S.x+Math.cos(a)*d, y = S.y+Math.sin(a)*d - 30;
+    const pts = [[x,y]];
+    for(let i=0;i<7;i++){ x += rnd(-9,9); y += rnd(7,12); pts.push([x,y]); }
+    WX.bolts.push({pts, life:10});
+    WX.flash = 0.55;
+    const dt = Math.hypot(TOWN.x-S.x, TOWN.y-S.y);
+    if(dt < S.r*1.1 && !WX.thunder){
+      WX.thunder = { t0:performance.now(), secs: clamp(Math.round(dt/S.r*8)+1, 1, 9) };
+    }
+  }
+  if(WX.thunder && performance.now() - WX.thunder.t0 > WX.thunder.secs*1000 + 3500) WX.thunder = null;
+}
+
+/* --- desen --- */
+function drawSea(){
+  const warm = clamp((H.sst - 22) / 10, 0, 1);
+  const g = X3.createLinearGradient(0,0,0,WH);
+  if(WX.ph==='uragan'){
+    g.addColorStop(0, '#17457a');
+    g.addColorStop(1, 'rgb(' + Math.round(20+70*warm) + ',' + Math.round(110+40*warm) + ',' + Math.round(175-30*warm) + ')');
+  } else {
+    const cold = WX.ta < 5;
+    g.addColorStop(0, cold ? '#2b5878' : '#1f5f96'); g.addColorStop(1, cold ? '#4f7f9c' : '#3d8cc4');
+  }
+  X3.fillStyle = g; X3.fillRect(0,0,WW,WH);
+
+  // valuri: perpendiculare pe vânt, mai mari cu cât vântul e mai tare
+  const v = wvec(), s = WIND.spd, p = {x:-v.y, y:v.x};
+  const L = 3 + Math.min(s,120)/12, shift = (performance.now()/1000 * (4 + s*0.25)) % 44;
+  X3.lineWidth = 1.6 + s/80; X3.lineCap = 'round';
+  for(let gx=10; gx<WW+44; gx+=44){
+    for(let gy=12; gy<WH+40; gy+=40){
+      const off = (Math.floor(gy/40)%2)*22;
+      let cx = gx + off + v.x*shift - 22, cy = gy + v.y*shift - 20;
+      if(overLand(cx,cy)) continue;
+      X3.strokeStyle = 'rgba(200,235,255,' + (0.25 + Math.min(s,100)/250) + ')';
+      X3.beginPath();
+      X3.moveTo(cx - p.x*L, cy - p.y*L);
+      X3.quadraticCurveTo(cx + v.x*L*0.7, cy + v.y*L*0.7, cx + p.x*L, cy + p.y*L);
+      X3.stroke();
+      if(s > 40 && ((gx*7+gy*3)%5)===0){                // creste albe de val
+        X3.fillStyle = 'rgba(255,255,255,.85)';
+        X3.beginPath(); X3.arc(cx + v.x*L*0.7, cy + v.y*L*0.7, 1.6 + s/70, 0, 7); X3.fill();
+      }
+    }
+  }
+}
+
+function drawLand(){
+  const snowy = WX.ph!=='uragan' && (WX.ta <= 0);
+  X3.fillStyle = snowy ? '#e9f1f6' : '#6d8f5c';
+  X3.beginPath(); LANDPOLY.forEach(([x,y],i)=> i? X3.lineTo(x,y) : X3.moveTo(x,y)); X3.closePath(); X3.fill();
+  X3.beginPath(); X3.moveTo(0,410); X3.lineTo(260,410); X3.quadraticCurveTo(275,430,262,450); X3.lineTo(0,450); X3.closePath(); X3.fill();
+  X3.strokeStyle = snowy ? '#b8cad6' : '#4f6e42'; X3.lineWidth = 2;
+  X3.beginPath(); LANDPOLY.forEach(([x,y],i)=> i? X3.lineTo(x,y) : X3.moveTo(x,y)); X3.stroke();
+
+  // copacii se îndoaie în direcția vântului
+  const v = wvec(), s = WIND.spd, bend = Math.min(s,140)/140*9;
+  const sway = Math.sin(performance.now()/(s>60?120:300)) * Math.min(s,140)/140*2.5;
+  for(const [x,y] of TREES){
+    const tx = x + v.x*(bend+sway), ty = y - 13 + v.y*(bend+sway)*0.5;
+    X3.strokeStyle = '#6b4a2b'; X3.lineWidth = 3;
+    X3.beginPath(); X3.moveTo(x,y); X3.quadraticCurveTo(x, y-7, tx, ty); X3.stroke();
+    X3.fillStyle = snowy ? '#c9dbe4' : '#3e7a3a';
+    X3.beginPath(); X3.ellipse(tx, ty-2, 7 + Math.abs(v.x)*bend*0.25, 7, 0, 0, 7); X3.fill();
+  }
+
+  // orașul + mâneca de vânt
+  X3.font = '22px Segoe UI Emoji, Apple Color Emoji, sans-serif'; X3.textAlign = 'center';
+  X3.fillText('🏠', TOWN.x, TOWN.y + 8);
+  X3.font = 'bold 11px Segoe UI'; X3.fillStyle = snowy ? '#2c4f6b' : '#fff';
+  X3.fillText('orașul tău', TOWN.x, TOWN.y + 24);
+  const px = TOWN.x + 20, py = TOWN.y + 6;
+  X3.strokeStyle = '#ddd'; X3.lineWidth = 2; X3.beginPath(); X3.moveTo(px, py); X3.lineTo(px, py-22); X3.stroke();
+  const sl = 6 + Math.min(s,60)/4, droop = s < 8 ? 1 : 0;
+  const ex = px + (droop ? 2 : v.x*sl), ey = py - 22 + (droop ? 10 : v.y*sl);
+  const nx = -(ey-(py-22)), ny = (ex-px);
+  const nl = Math.hypot(nx,ny) || 1;
+  X3.fillStyle = '#ff7a2f';
+  X3.beginPath(); X3.moveTo(px + nx/nl*4, py-22 + ny/nl*4); X3.lineTo(px - nx/nl*4, py-22 - ny/nl*4); X3.lineTo(ex, ey); X3.closePath(); X3.fill();
+  X3.textAlign = 'left';
+  X3.fillStyle = snowy ? '#5f7d92' : '#cfe3c4'; X3.font = 'bold 12px Segoe UI';
+  X3.fillText('USCAT', 12, 20); X3.fillText('USCAT', 12, 440);
+}
+
+function cloudBlob(x, y, r, col){
+  X3.fillStyle = col; X3.beginPath(); X3.arc(x, y, r, 0, 7); X3.fill();
+}
+
+function drawWeather(){
+  const S = WX.sys, ph = WX.ph, v = wvec(), s = WIND.spd;
+  // nori mici de vreme bună
+  if(ph==='senin' || ph==='vant' || ph==='ceata'){
+    for(const c of WX.cumuli){
+      const col = ph==='vant' ? 'rgba(235,240,245,.8)' : 'rgba(255,255,255,.85)';
+      const k = c.s * (ph==='vant' ? 0.8 : 1);
+      cloudBlob(c.x, c.y, 11*k, col); cloudBlob(c.x+12*k, c.y+3*k, 9*k, col); cloudBlob(c.x-12*k, c.y+4*k, 8*k, col);
+    }
+  }
+  if(hasSystem()){
+    const col = {ploaie:'rgba(160,174,186,.9)', furtuna:'rgba(88,99,112,.93)', ninsoare:'rgba(220,228,236,.92)', grindina:'rgba(96,112,110,.93)'}[ph];
+    const edge = {ploaie:'rgba(190,200,210,.5)', furtuna:'rgba(120,130,140,.5)', ninsoare:'rgba(240,244,248,.55)', grindina:'rgba(130,145,140,.5)'}[ph];
+    // umbra
+    X3.fillStyle = 'rgba(0,20,40,.18)';
+    X3.beginPath(); X3.ellipse(S.x+10, S.y+14, S.r*0.95, S.r*0.8, 0, 0, 7); X3.fill();
+    for(const p of WX.puffs){
+      const wob = Math.sin(performance.now()/900 + p.w)*2;
+      cloudBlob(S.x + p.dx*S.r + wob, S.y + p.dy*S.r, p.r*S.r*1.25, edge);
+    }
+    for(const p of WX.puffs){
+      const wob = Math.sin(performance.now()/900 + p.w)*2;
+      cloudBlob(S.x + p.dx*S.r + wob, S.y + p.dy*S.r, p.r*S.r, col);
+    }
+    // nicovala norului de furtună
+    if(ph==='furtuna' || ph==='grindina'){
+      X3.fillStyle = 'rgba(60,70,82,.55)';
+      X3.beginPath(); X3.ellipse(S.x + v.x*20, S.y + v.y*20, S.r*0.45, S.r*0.38, 0, 0, 7); X3.fill();
+    }
+  }
+  // precipitațiile, înclinate de vânt
+  for(const p of WX.parts){
+    if(p.k==='rain'){
+      const dx = v.x*s*0.03, dy = 3.2 + v.y*s*0.03, l = Math.hypot(dx,dy) || 1;
+      X3.strokeStyle = 'rgba(190,225,255,.85)'; X3.lineWidth = 1.4;
+      X3.beginPath(); X3.moveTo(p.x, p.y); X3.lineTo(p.x - dx/l*9, p.y - dy/l*9); X3.stroke();
+    } else if(p.k==='snow'){
+      X3.fillStyle = '#fff'; X3.beginPath(); X3.arc(p.x, p.y, 2, 0, 7); X3.fill();
+    } else {
+      X3.fillStyle = '#f4fbff'; X3.strokeStyle = '#8aa6b8'; X3.lineWidth = 1;
+      X3.beginPath(); X3.arc(p.x, p.y, 2.8, 0, 7); X3.fill(); X3.stroke();
+    }
+  }
+  // fulgere
+  for(const b of WX.bolts){
+    X3.strokeStyle = 'rgba(255,245,160,' + (b.life/10) + ')'; X3.lineWidth = 3;
+    X3.beginPath(); b.pts.forEach(([x,y],i)=> i? X3.lineTo(x,y) : X3.moveTo(x,y)); X3.stroke();
+    X3.strokeStyle = 'rgba(255,255,255,' + (b.life/10) + ')'; X3.lineWidth = 1.2; X3.stroke();
+  }
+}
+
+function drawStreaks(){
+  const v = wvec(), s = WIND.spd;
+  if(s < 8) return;
+  const n = Math.min(WX.streaks.length, Math.round(s*0.9));
+  const L = 6 + s*0.22;
+  X3.strokeStyle = 'rgba(255,255,255,' + clamp(0.18 + s/300, 0, 0.6) + ')';
+  X3.lineWidth = 1.3; X3.lineCap = 'round';
+  X3.beginPath();
+  for(let i=0;i<n;i++){
+    const k = WX.streaks[i];
+    X3.moveTo(k.x, k.y); X3.lineTo(k.x - v.x*L*k.l, k.y - v.y*L*k.l);
+  }
+  X3.stroke();
+}
+
+function drawFog(){
+  if(WX.fog < 0.02) return;
+  X3.fillStyle = 'rgba(232,238,242,' + (WX.fog*0.72) + ')';
+  X3.fillRect(0,0,WW,WH);
+  const t = performance.now()/4000;
+  for(let i=0;i<9;i++){
+    const x = (i*97 + t*30) % (WW+160) - 80, y = 40 + (i*61)%380;
+    X3.fillStyle = 'rgba(245,248,250,' + (WX.fog*0.35) + ')';
+    X3.beginPath(); X3.ellipse(x, y, 110, 40, 0, 0, 7); X3.fill();
+  }
 }
 
 function category(v){
@@ -535,29 +935,13 @@ function basinName(){
   return 'CICLON';
 }
 
-function drawStorm(info){
-  // ocean, colorat după temperatură
-  const warm = clamp((H.sst - 22) / 10, 0, 1);
-  const g = X3.createLinearGradient(0,0,0,450);
-  g.addColorStop(0, '#17457a');
-  g.addColorStop(1, 'rgb(' + Math.round(20+70*warm) + ',' + Math.round(110+40*warm) + ',' + Math.round(175-30*warm) + ')');
-  X3.fillStyle = g; X3.fillRect(0,0,640,450);
-
-  // uscat
-  X3.fillStyle = '#6d8f5c';
-  X3.beginPath(); X3.moveTo(0,0); X3.lineTo(118,0); X3.lineTo(100,120);
-  X3.lineTo(118,230); X3.lineTo(70,330); X3.lineTo(0,330); X3.closePath(); X3.fill();
-  X3.fillRect(0, 408, 640, 42);
-  X3.fillStyle = '#4f6e42'; X3.font = 'bold 12px Segoe UI'; X3.textAlign='left';
-  X3.fillText('USCAT', 14, 60); X3.fillText('USCAT', 14, 432);
-
+function drawHurricane(){
   // ecuator
   X3.strokeStyle = 'rgba(255,255,255,.55)'; X3.lineWidth = 2; X3.setLineDash([10,7]);
-  X3.beginPath(); X3.moveTo(0, EQ); X3.lineTo(640, EQ); X3.stroke(); X3.setLineDash([]);
-  X3.fillStyle = 'rgba(255,255,255,.75)'; X3.font = 'bold 11px Segoe UI'; X3.textAlign='right';
-  X3.fillText('ECUATOR — aici furtunile nu se pot roti', 632, EQ - 7);
+  X3.beginPath(); X3.moveTo(0, EQ); X3.lineTo(WW, EQ); X3.stroke(); X3.setLineDash([]);
+  X3.fillStyle = 'rgba(255,255,255,.75)'; X3.font = 'bold 11px Segoe UI'; X3.textAlign='left';
+  X3.fillText('ECUATOR — aici furtunile nu se pot roti', 12, EQ - 7);
 
-  // traseu
   if(H.trail.length > 1){
     X3.strokeStyle = 'rgba(255,255,255,.45)'; X3.lineWidth = 2; X3.setLineDash([5,5]);
     X3.beginPath(); X3.moveTo(H.trail[0].x, H.trail[0].y);
@@ -565,7 +949,6 @@ function drawStorm(info){
     X3.stroke(); X3.setLineDash([]);
   }
 
-  // furtuna
   const cat = category(H.v);
   const R = 26 + H.v*0.26;
   X3.save(); X3.translate(H.x, H.y); X3.rotate(H.rot * (H.hemi>0 ? -1 : 1));
@@ -582,47 +965,467 @@ function drawStorm(info){
     X3.strokeStyle = 'rgba(255,255,255,' + (0.35 + H.v/700) + ')';
     X3.lineWidth = 4 + H.v/70; X3.lineCap = 'round'; X3.stroke();
   }
-  if(H.v >= 119){                                  // ochiul se vede doar la uragan adevărat
+  if(H.v >= 119){
     X3.fillStyle = 'rgba(30,70,110,.95)';
     X3.beginPath(); X3.arc(0,0,R*0.16,0,7); X3.fill();
   }
   X3.restore();
 
-  // săgeata sensului de rotație
   X3.fillStyle = cat.c; X3.font = 'bold 13px Segoe UI'; X3.textAlign='center';
   X3.fillText(H.hemi>0 ? '↺ invers acelor de ceas' : '↻ în sensul acelor de ceas', H.x, H.y + R + 20);
   if(H.named && H.v > 63){
     X3.fillStyle = '#fff'; X3.font = 'bold 15px Segoe UI';
-    X3.fillText(basinName() + 'UL ' + H.named.toUpperCase(), H.x, H.y - R - 12);
+    X3.fillText((H.v >= 119 ? basinName() + 'UL ' : 'FURTUNA ') + H.named.toUpperCase(), H.x, H.y - R - 12);
+  }
+}
+
+function drawHUD(){
+  X3.setTransform(1,0,0,1,0,0);
+  if(WX.flash > 0.02){ X3.fillStyle = 'rgba(255,255,240,' + WX.flash*0.55 + ')'; X3.fillRect(0,0,WW,WH); }
+
+  // busola cu săgeata vântului
+  const cx = WW-50, cy = 52, v = wvec();
+  X3.fillStyle = 'rgba(255,255,255,.85)'; X3.beginPath(); X3.arc(cx, cy, 38, 0, 7); X3.fill();
+  X3.strokeStyle = '#1b5e9e'; X3.lineWidth = 2; X3.stroke();
+  X3.fillStyle = '#1b5e9e'; X3.font = 'bold 11px Segoe UI'; X3.textAlign = 'center';
+  X3.fillText('N', cx, cy-26); X3.fillText('S', cx, cy+33); X3.fillText('V', cx-29, cy+4); X3.fillText('E', cx+29, cy+4);
+  if(WIND.spd > 0){
+    const L = 20;
+    X3.strokeStyle = '#e23b3b'; X3.lineWidth = 4; X3.lineCap = 'round';
+    X3.beginPath(); X3.moveTo(cx - v.x*L, cy - v.y*L); X3.lineTo(cx + v.x*L, cy + v.y*L); X3.stroke();
+    const hx = cx + v.x*L, hy = cy + v.y*L, px = -v.y, py = v.x;
+    X3.fillStyle = '#e23b3b'; X3.beginPath();
+    X3.moveTo(hx + v.x*6, hy + v.y*6); X3.lineTo(hx + px*7 - v.x*3, hy + py*7 - v.y*3); X3.lineTo(hx - px*7 - v.x*3, hy - py*7 - v.y*3);
+    X3.closePath(); X3.fill();
+  }
+  X3.fillStyle = '#fff'; X3.font = 'bold 12px Segoe UI';
+  X3.fillText(WIND.spd + ' km/h', cx, cy + 54);
+
+  if(WX.ph==='uragan'){
+    X3.textAlign='left'; X3.font='bold 12px Segoe UI'; X3.fillStyle='#fff';
+    X3.fillText('apa: ' + H.sst.toFixed(1).replace('.',',') + ' °C', WW-200, 22);
+    X3.fillStyle = H.sst >= 26.5 ? '#9ff0bf' : '#ffc9c9'; X3.font='bold 11px Segoe UI';
+    X3.fillText(H.sst >= 26.5 ? 'destul de caldă ✔' : 'prea rece ✘', WW-200, 38);
+  } else {
+    X3.textAlign='left'; X3.font='bold 12px Segoe UI'; X3.fillStyle='#fff';
+    X3.fillText('aer: ' + WX.ta + ' °C', WW-200, 22);
   }
 
-  // scala de temperatură
-  X3.textAlign='left'; X3.font='bold 12px Segoe UI'; X3.fillStyle='#fff';
-  X3.fillText('apa: ' + H.sst.toFixed(1) + ' °C', 500, 28);
-  X3.fillStyle = H.sst >= 26.5 ? '#9ff0bf' : '#ffc9c9'; X3.font='bold 11px Segoe UI';
-  X3.fillText(H.sst >= 26.5 ? 'destul de caldă ✔' : 'prea rece ✘', 500, 44);
+  // mini-harta când e zoom
+  if(CAM.z > 1.01){
+    const mw = 112, mh = mw*WH/WW, mx = 10, my = WH - mh - 10, k = mw/WW;
+    X3.fillStyle = 'rgba(31,95,150,.9)'; X3.fillRect(mx, my, mw, mh);
+    X3.fillStyle = '#6d8f5c';
+    X3.beginPath(); LANDPOLY.forEach(([x,y],i)=> i? X3.lineTo(mx+x*k,my+y*k) : X3.moveTo(mx+x*k,my+y*k)); X3.closePath(); X3.fill();
+    X3.fillRect(mx, my+410*k, 260*k, 40*k);
+    const tx = WX.ph==='uragan' ? H.x : WX.sys.x, ty = WX.ph==='uragan' ? H.y : WX.sys.y;
+    if(WX.ph==='uragan' || hasSystem()){ X3.fillStyle = '#fff'; X3.beginPath(); X3.arc(mx+tx*k, my+ty*k, 3, 0, 7); X3.fill(); }
+    const hw = WW/2/CAM.z, hh = WH/2/CAM.z;
+    X3.strokeStyle = '#ffde59'; X3.lineWidth = 2;
+    X3.strokeRect(mx+(CAM.x-hw)*k, my+(CAM.y-hh)*k, hw*2*k, hh*2*k);
+    X3.strokeStyle = '#fff'; X3.lineWidth = 1; X3.strokeRect(mx, my, mw, mh);
+  }
+}
 
-  // citiri + mesaj
-  document.getElementById('r3wind').textContent = Math.round(H.v) + ' km/h';
-  document.getElementById('r3p').textContent    = Math.round(1010 - 0.0016*H.v*H.v) + ' hPa';
-  const rc = document.getElementById('r3cat'); rc.textContent = cat.t; rc.style.color = cat.c;
-  document.getElementById('r3name').textContent = H.v >= 119 ? basinName() : '—';
+function drawMap(){
+  if(CAM.follow){
+    const tx = WX.ph==='uragan' ? H.x : WX.sys.x, ty = WX.ph==='uragan' ? H.y : WX.sys.y;
+    if(CAM.z < 1.6) zoomAt(WW/2, WH/2, 1.02);
+    CAM.x += (clamp(tx,0,WW) - CAM.x)*0.08; CAM.y += (clamp(ty,0,WH) - CAM.y)*0.08; clampCam();
+  }
+  X3.setTransform(CAM.z,0,0,CAM.z, WW/2 - CAM.x*CAM.z, WH/2 - CAM.y*CAM.z);
+  drawSea(); drawLand();
+  if(WX.ph==='uragan') drawHurricane(); else drawWeather();
+  drawStreaks(); drawFog();
+  drawHUD();
+}
 
-  const m = document.getElementById('msg3');
-  if(info.land) m.textContent = '🏝️ Furtuna a ajuns deasupra uscatului. Nu mai are apă caldă din care să ia energie — slăbește repede. De asta uraganele se sting la câteva zile după ce ating țărmul.';
-  else if(info.nearEq) m.textContent = '🌍 Prea aproape de ecuator. Acolo rotația Pământului nu reușește să învârtă aerul, așa că uraganele nu se nasc niciodată chiar pe ecuator.';
-  else if(H.sst < 26.5) m.textContent = '🌡️ Apa are sub 26,5 °C. Fără apă caldă nu există evaporare puternică, deci furtuna nu are combustibil.';
-  else if(H.shear >= 2) m.textContent = '🌬️ Forfecare mare: vântul de la înălțime rupe vârful furtunii și nu o lasă să se organizeze.';
-  else if(H.v >= 252) m.textContent = '🌀 Categoria 5. Vânt de peste 252 km/h — în realitate smulge acoperișuri întregi și inundă coasta cu valul de furtună.';
-  else if(H.v >= 119) m.textContent = '🌀 E ' + basinName().toLowerCase() + ' în toată regula: peste 119 km/h și cu ochi la mijloc. În ochi e liniște și se vede cerul.';
-  else if(H.v >= 63) m.textContent = '🌬️ Furtună tropicală — exact acum primește un nume: ' + (H.named||'…') + '. Până aici era doar „depresiune tropicală", cu număr.';
-  else m.textContent = 'Depresiune tropicală. Are nevoie de apă peste 26,5 °C, de forfecare mică și de timp.';
+/* --- cartonașe + mesaje --- */
+function setCard(i, k, v, col){
+  $('k'+i).textContent = k; const e = $('v'+i); e.textContent = v; if(col) e.style.color = col;
+}
+function townWeather(){
+  const s = WIND.spd;
+  if(WX.ph==='uragan'){
+    const d = Math.hypot(H.x-TOWN.x, H.y-TOWN.y), R = 26 + H.v*0.26;
+    if(d < R*1.2) return H.v >= 119 ? '🌀 ' + basinName().toLowerCase() + '!' : '🌧️ furtună';
+    if(d < R*2) return '☁️ vânt, nori';
+    return '⛅ liniște';
+  }
+  if(WX.fog > 0.35) return '🌫️ ceață';
+  if(hasSystem()){
+    const d = Math.hypot(WX.sys.x-TOWN.x, WX.sys.y-TOWN.y);
+    if(d < WX.sys.r*0.85){
+      const k = precipKind();
+      if(WX.ph==='furtuna') return k==='snow' ? '⛈️ furtună de zăpadă' : '⛈️ furtună';
+      if(k==='hail') return '🧊 grindină';
+      if(k==='snow') return s>=50 ? '🌬️ viscol' : '🌨️ ninge';
+      if(k==='sleet') return '🌨️ lapoviță';
+      return '🌧️ plouă';
+    }
+    if(d < WX.sys.r*1.3) return '☁️ înnorat';
+  }
+  if(s >= 62) return '💨 vânt puternic';
+  return WX.ta <= 0 ? '❄️ senin și ger' : '☀️ senin';
+}
+function relation(){
+  const S = WX.sys, v = wvec(), dx = TOWN.x - S.x, dy = TOWN.y - S.y;
+  const d = Math.hypot(dx,dy);
+  if(d < S.r*0.85) return 'over';
+  if(WIND.spd < 3) return 'still';
+  const along = dx*v.x + dy*v.y, perp = Math.abs(dx*v.y - dy*v.x);
+  if(along > 0 && perp < S.r*0.85) return 'coming';
+  return 'away';
+}
+function km(x){ return (Math.round(x*10)/10).toString().replace('.',','); }
+
+function updateMapTexts(info){
+  const s = WIND.spd, dn = DIRN[WIND.dir], bf = beaufort(s), m = $('msg3');
+  setCard(4, '🏠 în oraș', townWeather(), '#22303c');
+
+  if(WX.ph==='uragan'){
+    const cat = category(H.v);
+    setCard(0, 'vântul furtunii', Math.round(H.v) + ' km/h', '#e23b3b');
+    setCard(1, 'presiune', Math.round(1010 - 0.0016*H.v*H.v) + ' hPa', '#1b5e9e');
+    setCard(2, 'categorie', cat.t, cat.c);
+    setCard(3, 'cum i se spune', H.v >= 119 ? basinName() : '—', '#0e7c86');
+    const dT = Math.hypot(H.x-TOWN.x, H.y-TOWN.y), v = wvec();
+    const coming = s > 3 && ((TOWN.x-H.x)*v.x + (TOWN.y-H.y)*v.y) > 0 && Math.abs((TOWN.x-H.x)*v.y - (TOWN.y-H.y)*v.x) < 90;
+    if(info.land) m.textContent = '🏝️ Furtuna a ajuns deasupra uscatului. Nu mai are apă caldă din care să ia energie — slăbește repede. De asta uraganele se sting la câteva zile după ce ating țărmul.';
+    else if(info.nearEq) m.textContent = '🌍 Prea aproape de ecuator. Acolo rotația Pământului nu reușește să învârtă aerul, așa că uraganele nu se nasc niciodată chiar pe ecuator.';
+    else if(H.sst < 26.5) m.textContent = '🌡️ Apa are sub 26,5 °C. Fără apă caldă nu există evaporare puternică, deci furtuna nu are combustibil.';
+    else if(info.shearEff >= 2) m.textContent = '🌬️ Vântul de sus e prea puternic: rupe vârful furtunii și nu o lasă să se organizeze.';
+    else if(coming && H.v >= 63 && dT < 300) m.textContent = '🏠 Vântul dinspre ' + dn + ' împinge furtuna spre orașul tău! Schimbă direcția vântului ca s-o trimiți în altă parte.';
+    else if(H.v >= 252) m.textContent = '🌀 Categoria 5. Vânt de peste 252 km/h — în realitate smulge acoperișuri întregi și inundă coasta cu valul de furtună.';
+    else if(H.v >= 119) m.textContent = '🌀 E ' + basinName().toLowerCase() + ' în toată regula: peste 119 km/h și cu ochi la mijloc. În ochi e liniște și se vede cerul.';
+    else if(H.v >= 63) m.textContent = '🌬️ Furtună tropicală — exact acum primește un nume: ' + (H.named||'…') + '. Până aici era doar „depresiune tropicală", cu număr.';
+    else m.textContent = 'Depresiune tropicală. Are nevoie de apă peste 26,5 °C, de forfecare mică și de timp. Vântul dinspre ' + dn + ' o împinge — schimbă-l și vezi încotro merge.';
+    return;
+  }
+
+  setCard(0, 'vânt', s + ' km/h', '#e23b3b');
+  setCard(1, 'dinspre', dn, '#1b5e9e');
+  setCard(2, 'scara Beaufort', bf.b + ' din 12', bf.b >= 8 ? '#e23b3b' : '#a3410a');
+  setCard(3, 'ce se vede', bf.d, '#0e7c86');
+
+  // tunetul: numărăm secundele
+  if(WX.thunder){
+    const el = (performance.now() - WX.thunder.t0)/1000, n = WX.thunder.secs;
+    if(el < n){
+      const c = []; for(let i=1;i<=Math.floor(el)+1;i++) c.push(i);
+      m.textContent = '⚡ Fulger lângă oraș! Numără până auzi tunetul: ' + c.join('… ') + '…';
+    } else {
+      m.textContent = '💥 BUBUIE! Au trecut ' + n + ' secunde. Cum 3 secunde ≈ 1 km, furtuna e la cam ' + km(n/3) + ' km de oraș.';
+    }
+    return;
+  }
+
+  const ph = WX.ph, k = precipKind();
+  if(ph==='senin'){
+    m.textContent = s >= 62 ? '💨 Cer senin, dar vânt puternic: ' + bf.d + '. Uită-te la copaci și la valuri!'
+      : '☀️ Cer senin. Norii mici și pufoși (cumulus) înseamnă vreme bună. Ei merg încotro îi duce vântul — schimbă direcția și urmărește-i.';
+    return;
+  }
+  if(ph==='vant'){
+    m.textContent = s < 50 ? '💨 Mărește viteza vântului peste 50 km/h ca să devină „vânt puternic".'
+      : '💨 Vânt de ' + s + ' km/h dinspre ' + dn + ' — Beaufort ' + bf.b + ': ' + bf.d + '. Copacii, valurile și mâneca portocalie de lângă oraș arată toate încotro bate.';
+    return;
+  }
+  if(ph==='ceata'){
+    if(WX.fog > 0.4) m.textContent = '🌫️ Ceață: un nor care stă jos, lipit de pământ. Apare când aerul e liniștit și rece. Mărește vântul și vezi ce se întâmplă!';
+    else if(s >= 25) m.textContent = '💨 Vântul a amestecat aerul și a risipit ceața. De aceea ceața apare mai ales în diminețile fără vânt.';
+    else m.textContent = '🌫️ Ceața se subțiază… Cu cât bate vântul mai tare, cu atât dispare mai repede.';
+    return;
+  }
+  let pre = '';
+  if(ph==='grindina') pre = '🧊 Grindină: bile de gheață făcute sus, în norii de furtună — poate cădea și vara! ';
+  else if(ph==='furtuna') pre = '⛈️ Furtună cu fulgere și tunete. ';
+  if(k==='snow')  pre += (ph==='ploaie' ? '❄️ Aerul are sub 0 °C, așa că ploaia a devenit ninsoare! ' : '') + (s >= 50 ? '🌬️ Viscol: zăpadă + vânt puternic! ' : (ph==='ninsoare' ? '🌨️ Ninge. ' : ''));
+  if(k==='sleet') pre += '🌨️ Lapoviță: aerul are între 1 și 3 °C, așa că o parte din fulgi se topesc pe drum. ';
+  if(k==='rain'){
+    if(ph==='ninsoare') pre += '🌧️ E prea cald pentru zăpadă: fulgii se topesc și ajung jos ca ploaie. Scade temperatura aerului! ';
+    else if(ph==='ploaie') pre += s >= 50 ? '🌧️💨 Ploaie bătută de vânt — vezi cum se înclină picăturile? Umbrela nu mai ajută! ' : '🌧️ Ploaie. ';
+  }
+  const r = relation();
+  const rel = {
+    over:  'Norii sunt chiar deasupra orașului tău! 🏠',
+    still: 'Fără vânt, norii stau pe loc și plouă mereu în același loc. Pornește vântul sau trage norii cu mouse-ul.',
+    coming:'Vântul dinspre ' + dn + ' îi aduce spre orașul tău 🏠 — în curând se schimbă vremea acolo.',
+    away:  'Vântul dinspre ' + dn + ' îi duce pe lângă orașul tău sau departe de el. Schimbă direcția vântului ca să-i trimiți spre 🏠.'
+  }[r];
+  m.textContent = pre + rel;
 }
 
 /* ============================================================
-   BUCLA + COMENZI
+   LECȚII + QUIZ
    ============================================================ */
+const LESSONS = {
+  A: {
+    tab:'tabA', next:2, nextName:'2 · Fabrica de nori',
+    title:'Lecția A · Apa care călătorește', en:'The water cycle',
+    cards:[
+      { e:'🧊 💧 💨', t:'Apa are trei stări', p:[
+        'Apa poate fi <b>solidă</b> (gheața), <b>lichidă</b> (apa din pahar) sau <b>gaz</b> (vaporii de apă).',
+        'Vaporii de apă sunt <b>invizibili</b>. Nu-i poți vedea, dar sunt peste tot în aerul din jurul tău — chiar și acum!',
+        'Gheața se topește la <b>0 °C</b>. Apa fierbe la <b>100 °C</b>.'],
+        w:[['solid','solid'],['liquid','lichid'],['gas','gaz'],['melting','topire'],['freezing','înghețare']] },
+      { e:'☀️ 🌊 ⬆️', t:'Evaporarea', p:[
+        'Soarele încălzește apa din mări, lacuri și bălți. Apa se transformă în vapori și urcă în aer. Asta se numește <b>evaporare</b>.',
+        'Ai observat? Băltoaca din curtea școlii dispare după o zi cu soare. Rufele de pe sârmă se usucă mai repede când e cald și bate vântul.',
+        '👉 <b>Cu cât e mai cald, cu atât apa se evaporă mai repede.</b>'],
+        w:[['evaporation','evaporare'],['water vapour','vapori de apă']] },
+      { e:'🪞 🥤 ❄️', t:'Condensarea', p:[
+        'Când vaporii întâlnesc ceva <b>rece</b>, se transformă înapoi în picături mici de apă. Asta se numește <b>condensare</b>.',
+        'O vezi des: oglinda aburită din baie după duș, paharul cu gheață care „transpiră" pe dinafară, aburul care îți iese din gură iarna.',
+        'Sus, în cer, aerul e foarte rece. Acolo vaporii se condensează și așa se formează <b>norii</b>. ☁️'],
+        w:[['condensation','condensare'],['cloud','nor']] },
+      { e:'☁️ 🌧️ 🌨️', t:'Precipitațiile', p:[
+        'În nor, picăturile mici se lovesc și se unesc. Când devin prea grele ca să mai plutească, cad.',
+        'Tot ce cade din nori se numește <b>precipitații</b>: ploaie, zăpadă, lapoviță, grindină.',
+        'Dacă aerul e sub <b>0 °C</b>, în loc de ploaie cade <b>zăpadă</b>. ❄️'],
+        w:[['precipitation','precipitații'],['rain','ploaie'],['snow','zăpadă'],['hail','grindină']] },
+      { e:'🏞️ 🔄 🦕', t:'Colectarea — și cercul o ia de la capăt', cycle:true, p:[
+        'Apa căzută curge în pârâuri și râuri, intră în pământ și ajunge înapoi în mare. Asta se numește <b>colectare</b>.',
+        'Apoi soarele o încălzește din nou… și totul o ia de la capăt. De aceea se numește <b>circuit</b>: e un cerc care nu se oprește.',
+        'Apa nu se pierde și nu se fabrică. Apa pe care o bei azi a fost cândva băută de un dinozaur! 🦕'],
+        w:[['collection','colectare'],['water cycle','circuitul apei']] }
+    ],
+    quiz:[
+      { q:'Ce face soarele în circuitul apei?', o:['Încălzește apa și o transformă în vapori','Face apa din mare sărată','Oprește ploaia'],
+        why:'Soarele e motorul circuitului. Fără căldura lui, apa nu s-ar evapora.', hint:'Gândește-te ce se întâmplă cu o băltoacă într-o zi cu soare.' },
+      { q:'Cum se numește când vaporii se răcesc și devin picături de apă?', o:['Condensare','Evaporare','Topire'],
+        why:'Condensare (condensation) — exact ce vezi pe oglinda din baie.', hint:'Oglinda din baie după duș… ce se întâmplă pe ea?' },
+      { q:'Când se usucă cel mai repede rufele întinse afară?', o:['Într-o zi caldă, cu soare și vânt','Într-o zi rece și ploioasă','Noaptea, iarna'],
+        why:'Căldura și vântul grăbesc evaporarea.', hint:'Evaporarea merge mai repede când e mai…' },
+      { q:'Un pahar cu apă și gheață se umple de picături pe dinafară. De unde vin ele?', o:['Din vaporii din aer, care s-au răcit pe pahar','Apa a trecut prin sticlă','Din gheață, care a sărit afară'],
+        why:'Aerul din cameră are vapori invizibili. Pe sticla rece, ei se condensează.', hint:'Sticla e rece. Ce pățesc vaporii când ating ceva rece?' },
+      { q:'În aplicație, la „Circuitul apei", ce se întâmplă cu numărul „total" de picături?', o:['Rămâne mereu la fel','Crește când plouă','Scade când e soare'],
+        why:'Apa doar își schimbă locul și forma — nu se pierde și nu se fabrică.', hint:'Se termină vreodată apa de pe Pământ?' },
+      { q:'La ce temperatură îngheață apa?', o:['0 °C','10 °C','100 °C'],
+        why:'La 0 °C apa devine gheață. La 100 °C fierbe.', hint:'Când afară e „minus", bălțile sunt înghețate.' },
+      { q:'Ce cuvânt englezesc înseamnă „evaporare"?', o:['evaporation','condensation','collection'],
+        why:'Evaporation = apa devine vapori. Condensation = vaporii devin picături. Collection = apa se adună în râuri și mări.', hint:'Seamănă foarte mult cu cuvântul românesc.' },
+      { q:'Ce cade din nori când aerul e sub 0 °C?', o:['Zăpadă','Ploaie','Ceață'],
+        why:'Sub 0 °C apa îngheață, așa că din nori cad fulgi de zăpadă.', hint:'Ce se întâmplă cu apa sub 0 °C?' }
+    ]
+  },
+  B: {
+    tab:'tabB', next:3, nextName:'3 · Uragane și vremea',
+    title:'Lecția B · Nori, vânt și furtuni', en:'Clouds, wind and storms',
+    cards:[
+      { e:'☁️ 🔬 💧', t:'Din ce e făcut un nor?', p:[
+        'Un nor <b>nu</b> e fum și nu e vată. E făcut din milioane de picături de apă <b>lichidă</b>, atât de mici încât plutesc în aer.',
+        'Norii foarte sus, subțiri ca niște fire (cirrus), sunt făcuți din cristale mici de <b>gheață</b>.',
+        'Și <b>ceața</b> e tot un nor — doar că stă jos, lipit de pământ. Când mergi prin ceață, mergi printr-un nor! 🌫️'],
+        w:[['cloud','nor'],['fog','ceață'],['droplet','picătură']] },
+      { e:'🫙 🧊 💨', t:'Rețeta norului', p:[
+        'În Fabrica de nori ai văzut: un nor are nevoie de <b>trei lucruri deodată</b>:',
+        '1️⃣ <b>vapori de apă</b> 💧 &nbsp; 2️⃣ <b>răcire</b> 🧊 &nbsp; 3️⃣ <b>fire mici de praf</b> 💨 pe care să se prindă picăturile.',
+        'Pe cer, firele de praf vin din nisip, din sarea mării, din fum sau din polenul florilor.'],
+        w:[['dust','praf'],['cool down','a se răci']] },
+      { e:'💨 🧭 🇬🇧', t:'Vântul și direcția lui', p:[
+        '<b>Vântul</b> e aer care se mișcă. Aerul cald urcă, iar aerul rece vine repede să-i ia locul — așa se naște vântul.',
+        'Vântul se numește după locul <b>de unde vine</b>. Un „vânt de vest" vine <b>dinspre vest</b> și merge spre est.',
+        'În Marea Britanie vântul bate cel mai des dinspre <b>vest și sud-vest</b>, de peste Oceanul Atlantic. De aceea aduce des nori și ploaie! ☔',
+        'Vântul duce norii cu el. Dacă se schimbă direcția vântului, se schimbă și locul unde plouă.'],
+        w:[['wind','vânt'],['west wind','vânt de vest'],['weather','vreme']] },
+      { e:'⛈️ ⚡ 🧊', t:'Furtuni, fulgere și grindină', p:[
+        'Norii de furtună (cumulonimbus) sunt uriași, ca niște turnuri. Din ei vin <b>fulgerele</b> și <b>tunetele</b>.',
+        'Lumina fulgerului ajunge la tine imediat, sunetul tunetului vine mai încet. Numără secundele dintre ele: <b>3 secunde ≈ 1 kilometru</b>.',
+        '<b>Grindina</b> sunt bile de gheață făcute sus, în norii de furtună. Poate cădea chiar și vara!',
+        'Vântul se măsoară pe <b>scara Beaufort</b>, de la 0 (calm) la 12 (forță de uragan). A inventat-o un amiral din marina britanică, Francis Beaufort.'],
+        w:[['lightning','fulger'],['thunder','tunet'],['storm','furtună']] },
+      { e:'🌀 🌊 🔥', t:'Uraganele', p:[
+        'Un uragan e o furtună uriașă care se învârte. Își ia puterea din <b>marea foarte caldă</b> — peste 26,5 °C.',
+        'În mijloc are un <b>ochi</b>: acolo e liniște și se vede cerul. În jurul ochiului bate cel mai puternic vânt.',
+        'Aceeași furtună are trei nume: <b>uragan</b> în Atlantic, <b>taifun</b> în Pacific, <b>ciclon</b> în Oceanul Indian.',
+        'Când ajunge pe uscat, nu mai are apă caldă și slăbește. Furtunile mari primesc nume — și în Marea Britanie, Met Office le dă nume, ca Storm Arwen.'],
+        w:[['hurricane','uragan'],['typhoon','taifun'],['cyclone','ciclon'],['eye','ochi']] }
+    ],
+    quiz:[
+      { q:'Din ce e făcut un nor?', o:['Din picături foarte mici de apă','Din fum','Din vată'],
+        why:'Picături atât de mici încât plutesc. Vaporii adevărați sunt invizibili.', hint:'Ce a apărut în borcan când vaporii s-au răcit?' },
+      { q:'De ce are nevoie un nor ca să se formeze?', o:['Vapori, răcire și fire de praf','Soare, nisip și sare','Doar de vânt'],
+        why:'Exact cele trei butoane din Fabrica de nori: apă caldă, gheață, fum.', hint:'Gândește-te la cele trei butoane din Fabrica de nori.' },
+      { q:'Un „vânt de vest" vine…', o:['dinspre vest','spre vest','de sus, din cer'],
+        why:'Vântul se numește după locul de unde vine. Vântul de vest merge spre est.', hint:'Vântul poartă numele locului DE UNDE pleacă.' },
+      { q:'Ce este ceața?', o:['Un nor care stă jos, lângă pământ','Fum de la mașini','Zăpadă topită'],
+        why:'Ceața e făcută tot din picături mici de apă — e un nor la nivelul pământului.', hint:'Din ce e făcut un nor? Dar dacă norul coboară jos de tot?' },
+      { q:'Vezi un fulger și numeri 6 secunde până auzi tunetul. Cât de departe e furtuna?', o:['Cam 2 km','Cam 6 km','Chiar deasupra ta'],
+        why:'3 secunde ≈ 1 km, deci 6 secunde ≈ 2 km.', hint:'3 secunde înseamnă 1 kilometru. De câte ori încape 3 în 6?' },
+      { q:'De ce are nevoie un uragan ca să devină tot mai puternic?', o:['De mare foarte caldă','De munți înalți','De zăpadă multă'],
+        why:'Marea caldă (peste 26,5 °C) îi dă energie prin evaporare.', hint:'De unde își ia uraganul energia?' },
+      { q:'Cum se numește o astfel de furtună născută în Oceanul Pacific?', o:['Taifun','Tornadă','Viscol'],
+        why:'Uragan în Atlantic, taifun în Pacific, ciclon în Oceanul Indian.', hint:'Are trei nume, după ocean…' },
+      { q:'Ce se întâmplă cu un uragan când ajunge pe uscat?', o:['Slăbește, pentru că nu mai are apă caldă','Devine mai puternic','Se transformă în ninsoare'],
+        why:'Fără apă caldă, uraganul rămâne fără „combustibil".', hint:'Pe uscat mai există mare caldă sub el?' },
+      { q:'Vântul duce norii de ploaie spre est. Orașul tău e la vest de nori. Ce se întâmplă?', o:['Ploaia se îndepărtează de oraș','Ploaia vine spre oraș','Ploaia se oprește peste tot'],
+        why:'Norii merg cu vântul. Merg spre est, deci se îndepărtează de un oraș aflat la vest.', hint:'Încotro merg norii? Unde e orașul?' }
+    ]
+  }
+};
+const LS = { A:{card:0, phase:'read'}, B:{card:0, phase:'read'} };
+
+function speak(text){
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g,'').replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu,''));
+    u.lang = 'ro-RO'; u.rate = 0.92;
+    const vs = speechSynthesis.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith('ro'));
+    if(vs.length) u.voice = vs[0];
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+const canSpeak = 'speechSynthesis' in window;
+
+function renderLesson(id){
+  const L = LESSONS[id], st = LS[id], box = $('lesson'+id);
+  const top = '<div class="top"><span class="kicker">' + L.title + ' · <i>' + L.en + '</i></span>' +
+              (P[id] ? '<span class="kicker" style="color:#1c8f4d">✅ trecută</span>' : '') + '</div>';
+  if(st.phase === 'read'){
+    const c = L.cards[st.card], n = L.cards.length;
+    let h = top + '<div class="big">' + c.e + '</div><h2>' + c.t + '</h2>';
+    h += c.p.map(x => '<p>' + x + '</p>').join('');
+    if(c.cycle) h += '<div class="cycle"><span>☀️ evaporare</span><em>→</em><span>☁️ condensare</span><em>→</em><span>🌧️ precipitații</span><em>→</em><span>🏞️ colectare</span><em>↺</em></div>';
+    h += '<div class="chips">' + c.w.map(w => '<span>🇬🇧 <b>' + w[0] + '</b> = ' + w[1] + '</span>').join('') + '</div>';
+    h += '<div class="nav"><button id="lp' + id + '"' + (st.card===0?' disabled':'') + '>← Înapoi</button>';
+    h += '<div style="display:flex;gap:8px;align-items:center"><div class="dots">' + L.cards.map((_,i)=>'<i class="' + (i<=st.card?'on':'') + '"></i>').join('') + '</div>';
+    if(canSpeak) h += '<button class="say" id="ls' + id + '">🔊 Citește-mi</button>';
+    h += '</div>';
+    h += st.card < n-1 ? '<button class="go" id="ln' + id + '">Înainte →</button>' : '<button class="go" id="ln' + id + '">✏️ Începe quiz-ul</button>';
+    h += '</div>';
+    box.innerHTML = h;
+    $('lp'+id).onclick = () => { st.card--; renderLesson(id); };
+    $('ln'+id).onclick = () => { if(st.card < n-1){ st.card++; renderLesson(id); } else startQuiz(id); };
+    if(canSpeak) $('ls'+id).onclick = () => speak(c.t + '. ' + c.p.join(' '));
+  }
+  else if(st.phase === 'quiz'){
+    const q = st.qs[st.qi];
+    let h = top + '<div class="kicker" style="margin-top:12px;color:#1b5e9e">Întrebarea ' + (st.qi+1) + ' din ' + st.qs.length +
+            ' &nbsp;·&nbsp; corecte din prima: ' + st.score + '</div>';
+    h += '<div class="q">' + q.q + '</div><div id="qo' + id + '"></div><div id="qf' + id + '"></div>';
+    box.innerHTML = h;
+    const ob = $('qo'+id);
+    q.order.forEach(i => {
+      const b = document.createElement('button'); b.className = 'qopt'; b.textContent = q.o[i];
+      b.onclick = () => answer(id, i, b); ob.appendChild(b);
+    });
+  }
+  else if(st.phase === 'done'){
+    const ok = st.score >= 4;
+    let h = top + '<div class="result"><div class="stars">' + '⭐'.repeat(st.score) + '<span style="opacity:.25">' + '⭐'.repeat(st.qs.length - st.score) + '</span></div>';
+    h += '<h2>' + st.score + ' din ' + st.qs.length + ' corecte din prima încercare</h2>';
+    if(ok){
+      h += '<p>🎉 Bravo! Ai deblocat <b>' + L.nextName + '</b>.</p>';
+      h += '<div class="nav" style="justify-content:center"><button class="btn go" id="lg' + id + '">🔓 Mergi la ' + L.nextName + ' →</button></div>';
+    } else {
+      h += '<p>Ai nevoie de cel puțin <b>4 din 5</b> ca să treci mai departe. Mai citește o dată lecția — întrebările vor fi puțin altfel.</p>';
+      h += '<div class="nav" style="justify-content:center"><button class="btn orange" id="lr' + id + '">📖 Recitește lecția</button><button class="btn go" id="lq' + id + '">✏️ Încearcă iar quiz-ul</button></div>';
+    }
+    h += '</div>';
+    box.innerHTML = h;
+    if(ok) $('lg'+id).onclick = () => openTab(L.next);
+    else { $('lr'+id).onclick = () => { st.phase='read'; st.card=0; renderLesson(id); }; $('lq'+id).onclick = () => startQuiz(id); }
+  }
+}
+function startQuiz(id){
+  const st = LS[id];
+  st.qs = shuffle(LESSONS[id].quiz).slice(0,5).map(q => Object.assign({order: shuffle([0,1,2])}, q));
+  st.qi = 0; st.score = 0; st.first = true; st.phase = 'quiz';
+  renderLesson(id);
+}
+function answer(id, i, btn){
+  const st = LS[id], q = st.qs[st.qi], fb = $('qf'+id);
+  if(i === 0){
+    btn.classList.add('ok');
+    if(st.first) st.score++;
+    document.querySelectorAll('#qo' + id + ' .qopt').forEach(b => b.disabled = true);
+    fb.innerHTML = '<div class="fb ok">✅ ' + (st.first ? 'Corect!' : 'Acum e corect!') + ' ' + q.why + '</div>' +
+      '<div class="nav" style="justify-content:flex-end"><button class="go" id="qn' + id + '">' + (st.qi < st.qs.length-1 ? 'Următoarea →' : 'Vezi rezultatul →') + '</button></div>';
+    $('qn'+id).onclick = () => {
+      st.qi++; st.first = true;
+      if(st.qi >= st.qs.length){
+        st.phase = 'done';
+        if(st.score >= 4 && !P[id]){ P[id] = true; saveP(); celebrate(); }
+        updateTabs();
+      }
+      renderLesson(id);
+    };
+  } else {
+    btn.classList.add('bad'); btn.disabled = true; st.first = false;
+    fb.innerHTML = '<div class="fb bad">💡 Nu chiar. Indiciu: ' + q.hint + ' Mai încearcă!</div>';
+  }
+}
+function celebrate(){
+  const em = ['🎉','⭐','💧','☁️','🌈','✨'];
+  for(let i=0;i<24;i++){
+    const s = document.createElement('div'); s.className = 'burst'; s.textContent = em[i%em.length];
+    s.style.setProperty('--dx', rnd(-320,320)+'px'); s.style.setProperty('--dy', rnd(-260,260)+'px');
+    document.body.appendChild(s); setTimeout(() => s.remove(), 1500);
+  }
+}
+
+/* ============================================================
+   TABURI + BLOCARE
+   ============================================================ */
+const TABS = [
+  {b:'tab1', m:'mod1', key:1,   s:'Apa de pe Pământ nu se termină niciodată — doar se plimbă. Pornește soarele și urmărește-o.'},
+  {b:'tabA', m:'modA', key:'A', s:'Citește lecția, apoi răspunde la 5 întrebări. Cu 4 corecte deblochezi Fabrica de nori.'},
+  {b:'tab2', m:'mod2', key:2,   s:'Trei ingrediente fac un nor. Încearcă toate combinațiile și vezi care merge.'},
+  {b:'tabB', m:'modB', key:'B', s:'Citește lecția, apoi răspunde la 5 întrebări. Cu 4 corecte deblochezi Uraganele și vremea.'},
+  {b:'tab3', m:'mod3', key:3,   s:'Alege vremea și schimbă vântul: vezi cum se mută ploaia, furtuna sau uraganul. Fă zoom pe hartă cu ＋ / －.'}
+];
+function locked(key){
+  if(key === 2 || key === 'B') return !P.A;
+  if(key === 3) return !(P.A && P.B);
+  return false;
+}
+function updateTabs(){
+  $('tab2').classList.toggle('lock', locked(2));
+  $('tabB').classList.toggle('lock', locked('B'));
+  $('tab3').classList.toggle('lock', locked(3));
+  $('tab2').textContent = (locked(2) ? '🔒 ' : '') + '2 · Fabrica de nori';
+  $('tabB').textContent = (locked('B') ? '🔒 ' : '📖 ') + 'Lecția B + quiz';
+  $('tab3').textContent = (locked(3) ? '🔒 ' : '') + '3 · Uragane și vremea';
+  $('tabA').classList.toggle('done', P.A);
+  $('tabB').classList.toggle('done', P.B);
+}
 let active = 1;
+function openTab(key){
+  const lm = $('lockmsg');
+  if(locked(key)){
+    const need = (key === 3 && P.A) ? 'B' : 'A';
+    lm.textContent = '🔒 Ca să intri aici, termină întâi Lecția ' + need + ' și quiz-ul ei (minim 4 din 5 corecte).';
+    key = need;
+  } else lm.textContent = '';
+  active = key;
+  TABS.forEach(o => {
+    $(o.b).classList.toggle('on', o.key === key);
+    $(o.m).classList.toggle('hidden', o.key !== key);
+    if(o.key === key) $('sub').textContent = o.s;
+  });
+  if(key === 'A' || key === 'B') renderLesson(key);
+  if(canSpeak) try{ speechSynthesis.cancel(); }catch(e){}
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+TABS.forEach(t => { $(t.b).onclick = () => openTab(t.key); });
+$('goA').onclick = () => openTab('A');
+$('goB').onclick = () => openTab('B');
+
+/* profesor / părinte */
+$('tUnlock').onclick = () => {
+  if($('tCode').value.trim() === '39'){ P.A = P.B = true; saveP(); updateTabs(); $('tMsg').textContent = 'Totul e deblocat.'; }
+  else $('tMsg').textContent = 'Cod greșit.';
+};
+$('tReset').onclick = () => {
+  if($('tCode').value.trim() !== '39'){ $('tMsg').textContent = 'Scrie codul ca să resetezi.'; return; }
+  P.A = P.B = false; saveP(); LS.A = {card:0, phase:'read'}; LS.B = {card:0, phase:'read'};
+  updateTabs(); openTab(1); $('tMsg').textContent = 'Progresul a fost șters.';
+};
+
+/* ============================================================
+   BUCLA
+   ============================================================ */
 function loop(){
   if(active === 1){
     const info = stepWater();
@@ -630,126 +1433,155 @@ function loop(){
     let s=0,v=0,c=0,l=0;
     for(const d of drops){
       if(d.st==='sea') s++;
-      else if(d.st==='vapor') v++;
+      else if(d.st==='vapor' || d.st==='rain') v++;
       else if(d.st==='cloud') c++;
-      else if(d.st==='rain') v++;
       else l++;
     }
-    document.getElementById('r1sea').textContent   = s;
-    document.getElementById('r1vap').textContent   = v;
-    document.getElementById('r1cloud').textContent = c;
-    document.getElementById('r1land').textContent  = l;
-    document.getElementById('r1tot').textContent   = drops.length;
-    const m1 = document.getElementById('msg1');
+    $('r1sea').textContent = s; $('r1vap').textContent = v; $('r1cloud').textContent = c;
+    $('r1land').textContent = l; $('r1tot').textContent = drops.length;
+    const m1 = $('msg1');
     if(S1.sun < 10) m1.textContent = '🌑 Fără soare nu există evaporare. Soarele e motorul întregului circuit — el ridică apa înapoi în cer.';
     else if(S1.temp <= 0) m1.textContent = '❄️ Sub zero grade, apa cade ca zăpadă și rămâne pe munte. Primăvara se topește și pornește din nou la vale.';
+    else if(S1.wind <= -3) m1.textContent = '🌬️ Vântul bate dinspre munte spre mare: norii rămân deasupra mării și plouă tot în mare. Muntele nu mai primește apă, iar râul seacă.';
+    else if(S1.wind === 0) m1.textContent = '😶 Fără vânt, norul stă deasupra mării unde s-a născut. Ploaia cade înapoi în mare, iar uscatul rămâne fără apă.';
     else if(info.raining) m1.textContent = '🌧️ Plouă! Norul s-a umplut: picăturile s-au unit până au devenit prea grele ca să mai plutească.';
     else if(c > info.cap*0.7) m1.textContent = '☁️ Norul se îngroașă și se întunecă. Încă puțin și începe ploaia.';
     else m1.textContent = 'Numărul „total" nu se schimbă niciodată. Apa nu se pierde și nu se fabrică — doar își schimbă locul și forma.';
   } else if(active === 2){
     stepJar(); drawJar();
-  } else {
-    const info = stepStorm(); drawStorm(info);
+  } else if(active === 3){
+    let info = null;
+    if(WX.ph === 'uragan') info = stepStorm();
+    stepWX();
+    drawMap();
+    updateMapTexts(info);
   }
   requestAnimationFrame(loop);
 }
 
 /* --- mod 1 --- */
-const bind = (id, lbl, key, f) => {
-  const el = document.getElementById(id);
-  el.oninput = () => { S1[key] = +el.value; document.getElementById(lbl).textContent = el.value; if(f) f(); };
-};
-bind('sSun','lSun','sun'); bind('sTemp','lTemp','temp'); bind('sWind','lWind','wind');
+function windLabel(w){ return w > 0 ? w + ' → spre munte' : (w < 0 ? (-w) + ' ← spre mare' : '0 · calm'); }
+$('sSun').oninput  = function(){ S1.sun  = +this.value; $('lSun').textContent  = this.value; };
+$('sTemp').oninput = function(){ S1.temp = +this.value; $('lTemp').textContent = this.value; };
+$('sWind').oninput = function(){ S1.wind = +this.value; $('lWind').textContent = windLabel(S1.wind); };
 function preset(sun, temp, wind){
   S1.sun=sun; S1.temp=temp; S1.wind=wind;
-  document.getElementById('sSun').value=sun;  document.getElementById('lSun').textContent=sun;
-  document.getElementById('sTemp').value=temp;document.getElementById('lTemp').textContent=temp;
-  document.getElementById('sWind').value=wind;document.getElementById('lWind').textContent=wind;
+  $('sSun').value=sun;  $('lSun').textContent=sun;
+  $('sTemp').value=temp;$('lTemp').textContent=temp;
+  $('sWind').value=wind;$('lWind').textContent=windLabel(wind);
 }
-document.getElementById('bSummer').onclick = ()=>preset(95, 30, 4);
-document.getElementById('bWinter').onclick = ()=>preset(30, -5, 4);
-document.getElementById('bDesert').onclick = ()=>preset(100, 35, 8);
-document.getElementById('bStorm').onclick  = ()=>preset(70, 18, 10);
+$('bSummer').onclick = ()=>preset(95, 30, 4);
+$('bWinter').onclick = ()=>preset(30, -5, 4);
+$('bDesert').onclick = ()=>preset(100, 35, 8);
+$('bStorm').onclick  = ()=>preset(70, 18, 10);
 
 /* --- mod 2 --- */
-document.getElementById('bWater').onclick = ()=>{ if(!J.closed){ J.water=!J.water; syncJarButtons(); } };
-document.getElementById('bIce').onclick   = ()=>{ if(!J.closed){ J.ice=!J.ice;     syncJarButtons(); } };
-document.getElementById('bSmoke').onclick = ()=>{ if(!J.closed){ J.smoke=!J.smoke; syncJarButtons(); } };
-document.getElementById('bRun').onclick = ()=>{
+$('bWater').onclick = ()=>{ if(!J.closed){ J.water=!J.water; syncJarButtons(); } };
+$('bIce').onclick   = ()=>{ if(!J.closed){ J.ice=!J.ice;     syncJarButtons(); } };
+$('bSmoke').onclick = ()=>{ if(!J.closed){ J.smoke=!J.smoke; syncJarButtons(); } };
+$('bRun').onclick = ()=>{
   J.closed = true; J.t = 0; J.lidOff = false;
-  document.getElementById('msg2').textContent = '⏳ Capacul e pus. Aerul de sus se răcește… urmărește borcanul.';
+  $('msg2').textContent = '⏳ Capacul e pus. Aerul de sus se răcește… urmărește borcanul.';
 };
-document.getElementById('bLid').onclick = ()=>{
+$('bLid').onclick = ()=>{
   if(!J.closed) return;
   J.lidOff = true;
-  document.getElementById('msg2').textContent = '💨 Norul iese din borcan și se destramă — aerul din cameră e cald și uscat, picăturile se evaporă la loc.';
+  $('msg2').textContent = '💨 Norul iese din borcan și se destramă — aerul din cameră e cald și uscat, picăturile se evaporă la loc.';
 };
-document.getElementById('bReset').onclick = ()=>resetJar(true);
+$('bReset').onclick = ()=>resetJar(true);
 syncJarButtons();
 
-/* --- mod 3 --- */
-document.getElementById('sSst').oninput = function(){
-  H.sst = +this.value; document.getElementById('lSst').textContent = (+this.value).toFixed(1);
-};
-function shearBtn(id, val){
-  document.getElementById(id).onclick = function(){
-    H.shear = val;
-    ['bSh0','bSh1','bSh2'].forEach(i=>document.getElementById(i).classList.remove('on'));
-    this.classList.add('on');
-  };
+/* --- mod 3: vremea --- */
+function setWind(dir, spd){
+  if(dir !== undefined) WIND.dir = dir;
+  if(spd !== undefined){ WIND.spd = spd; $('sWs').value = spd; $('lWs').textContent = spd; }
+  document.querySelectorAll('#compass button').forEach(b => b.classList.toggle('on', +b.dataset.d === WIND.dir));
+  const to = {0:'sud',45:'sud-vest',90:'vest',135:'nord-vest',180:'nord',225:'nord-est',270:'est',315:'sud-est'}[WIND.dir];
+  $('wTxt').textContent = WIND.spd === 0 ? 'nu bate vântul' : 'dinspre ' + DIRN[WIND.dir] + ' → spre ' + to;
 }
-shearBtn('bSh0',0); shearBtn('bSh1',1); shearBtn('bSh2',2.5);
-function basinBtn(id, val){
-  document.getElementById(id).onclick = function(){
-    H.basin = val;
-    ['bAtl','bPac','bInd'].forEach(i=>document.getElementById(i).classList.remove('on'));
-    this.classList.add('on');
-  };
-}
-basinBtn('bAtl','atl'); basinBtn('bPac','pac'); basinBtn('bInd','ind');
-function hemiBtn(id, val){
-  document.getElementById(id).onclick = function(){
-    H.hemi = val;
-    ['bNord','bSud'].forEach(i=>document.getElementById(i).classList.remove('on'));
-    this.classList.add('on');
-    H.y = val>0 ? 250 : 430; H.trail = [];
-    if(val<0) H.y = EQ + 55;
-  };
-}
-hemiBtn('bNord',1); hemiBtn('bSud',-1);
-document.getElementById('bNewStorm').onclick = ()=>{
-  H.x = 560; H.y = H.hemi>0 ? 250 : EQ+55; H.v = 35; H.trail = []; H.named = null;
-};
-function p3(e){
-  const r = c3.getBoundingClientRect(), t = e.touches ? e.touches[0] : e;
-  return {x:(t.clientX-r.left)*640/r.width, y:(t.clientY-r.top)*450/r.height};
-}
-c3.addEventListener('mousedown', e=>{ const p=p3(e); if(Math.hypot(p.x-H.x,p.y-H.y)<70){ H.drag=true; e.preventDefault(); } });
-c3.addEventListener('touchstart', e=>{ const p=p3(e); if(Math.hypot(p.x-H.x,p.y-H.y)<70){ H.drag=true; e.preventDefault(); } }, {passive:false});
-window.addEventListener('mousemove', e=>{ if(H.drag){ const p=p3(e); H.x=clamp(p.x,20,620); H.y=clamp(p.y,20,440); } });
-window.addEventListener('touchmove', e=>{ if(H.drag){ const p=p3(e); H.x=clamp(p.x,20,620); H.y=clamp(p.y,20,440); e.preventDefault(); } }, {passive:false});
-window.addEventListener('mouseup', ()=>{ H.drag=false; });
-window.addEventListener('touchend', ()=>{ H.drag=false; });
+document.querySelectorAll('#compass button').forEach(b => b.onclick = () => setWind(+b.dataset.d));
+$('sWs').oninput = function(){ setWind(undefined, +this.value); };
+function setTa(t){ WX.ta = t; $('sTa').value = t; $('lTa').textContent = t; }
+$('sTa').oninput = function(){ setTa(+this.value); };
 
-/* --- taburi --- */
-const TABS = [
-  {b:'tab1', m:'mod1', s:'Apa de pe Pământ nu se termină niciodată — doar se plimbă. Pornește soarele și urmărește-o.'},
-  {b:'tab2', m:'mod2', s:'Trei ingrediente fac un nor. Încearcă toate combinațiile și vezi care merge.'},
-  {b:'tab3', m:'mod3', s:'Aceeași furtună are trei nume, după locul în care se naște. Hrănește-o cu apă caldă.'}
-];
-TABS.forEach((t, i)=>{
-  document.getElementById(t.b).onclick = ()=>{
-    active = i+1;
-    TABS.forEach(o=>{
-      document.getElementById(o.b).classList.remove('on');
-      document.getElementById(o.m).classList.add('hidden');
-    });
-    document.getElementById(t.b).classList.add('on');
-    document.getElementById(t.m).classList.remove('hidden');
-    document.getElementById('sub').textContent = t.s;
-  };
+function setPh(ph){
+  WX.ph = ph; WX.parts = []; WX.bolts = []; WX.thunder = null;
+  document.querySelectorAll('#phBox button').forEach(b => b.classList.toggle('on', b.dataset.ph === ph));
+  $('gHur').classList.toggle('hidden', ph !== 'uragan');
+  $('gAir').classList.toggle('hidden', ph === 'uragan');
+  if(ph === 'uragan'){
+    setWind(90, 25);                                   // alizeele bat dinspre est
+    newStorm();
+  } else {
+    if(ph === 'ninsoare' && WX.ta > 0) setTa(-3);
+    if((ph === 'ploaie' || ph === 'furtuna') && WX.ta <= 3) setTa(12);
+    if(ph === 'grindina' && WX.ta <= 3) setTa(18);
+    if(ph === 'vant' && WIND.spd < 90) setWind(undefined, 95);
+    if(ph === 'ceata'){ setWind(undefined, 0); if(WX.ta > 12) setTa(6); WX.fog = Math.max(WX.fog, 0.6); }
+    if(ph === 'furtuna' && WIND.spd < 30) setWind(undefined, 40);
+    if(hasSystem() && WIND.spd === 0) setWind(undefined, 20);
+    if(hasSystem()){ WX.sys.x = 380; WX.sys.y = 190; }
+  }
+}
+document.querySelectorAll('#phBox button').forEach(b => b.onclick = () => setPh(b.dataset.ph));
+
+$('sSst').oninput = function(){ H.sst = +this.value; $('lSst').textContent = (+this.value).toFixed(1).replace('.',','); };
+function pick(ids, id){ ids.forEach(i => $(i).classList.toggle('on', i === id)); }
+[['bSh0',0],['bSh1',1],['bSh2',2.5]].forEach(([id,v]) => $(id).onclick = () => { H.shear = v; pick(['bSh0','bSh1','bSh2'], id); });
+[['bAtl','atl'],['bPac','pac'],['bInd','ind']].forEach(([id,v]) => $(id).onclick = () => { H.basin = v; pick(['bAtl','bPac','bInd'], id); });
+function newStorm(){ H.x = 520; H.y = H.hemi>0 ? 230 : EQ+62; H.v = 35; H.trail = []; H.named = null; }
+$('bNord').onclick = () => { H.hemi = 1;  pick(['bNord','bSud'], 'bNord'); newStorm(); };
+$('bSud').onclick  = () => { H.hemi = -1; pick(['bNord','bSud'], 'bSud');  newStorm(); };
+$('bNewStorm').onclick = newStorm;
+
+/* --- zoom + tragere pe hartă (mouse, deget, două degete) --- */
+$('zIn').onclick    = () => zoomAt(WW/2, WH/2, 1.4);
+$('zOut').onclick   = () => zoomAt(WW/2, WH/2, 1/1.4);
+$('zReset').onclick = () => { CAM.follow = false; $('zFollow').classList.remove('on'); CAM.z = 1; zoomAt(WW/2, WH/2, 1); };
+$('zFollow').onclick = () => { CAM.follow = !CAM.follow; $('zFollow').classList.toggle('on', CAM.follow); };
+function canvasPt(e){ const r = c3.getBoundingClientRect(); return {x:(e.clientX-r.left)*WW/r.width, y:(e.clientY-r.top)*WH/r.height}; }
+c3.addEventListener('wheel', e => { e.preventDefault(); const p = canvasPt(e); zoomAt(p.x, p.y, e.deltaY < 0 ? 1.15 : 1/1.15); }, {passive:false});
+const PTR = new Map(); let pan = null, pinch = null;
+c3.addEventListener('pointerdown', e => {
+  c3.setPointerCapture(e.pointerId);
+  const p = canvasPt(e); PTR.set(e.pointerId, p);
+  if(PTR.size === 2){
+    const [a,b] = [...PTR.values()];
+    pinch = { d:Math.hypot(a.x-b.x, a.y-b.y), z:CAM.z }; pan = null; H.drag = false; WX.dragSys = false; return;
+  }
+  const w = toWorld(p.x, p.y);
+  if(WX.ph === 'uragan' && Math.hypot(w.x-H.x, w.y-H.y) < 70) H.drag = true;
+  else if(hasSystem() && Math.hypot(w.x-WX.sys.x, w.y-WX.sys.y) < WX.sys.r*0.8) WX.dragSys = true;
+  else { pan = { sx:p.x, sy:p.y, cx:CAM.x, cy:CAM.y }; CAM.follow = false; $('zFollow').classList.remove('on'); }
+  c3.style.cursor = 'grabbing';
 });
+c3.addEventListener('pointermove', e => {
+  if(!PTR.has(e.pointerId)) return;
+  const p = canvasPt(e); PTR.set(e.pointerId, p);
+  if(pinch && PTR.size === 2){
+    const [a,b] = [...PTR.values()];
+    const f = (pinch.z * Math.hypot(a.x-b.x, a.y-b.y) / pinch.d) / CAM.z;
+    zoomAt((a.x+b.x)/2, (a.y+b.y)/2, f); return;
+  }
+  const w = toWorld(p.x, p.y);
+  if(H.drag){ H.x = clamp(w.x,20,WW-20); H.y = clamp(w.y,20,WH-20); }
+  else if(WX.dragSys){ WX.sys.x = clamp(w.x,0,WW); WX.sys.y = clamp(w.y,0,WH); }
+  else if(pan){ CAM.x = pan.cx - (p.x-pan.sx)/CAM.z; CAM.y = pan.cy - (p.y-pan.sy)/CAM.z; clampCam(); }
+});
+function endPtr(e){
+  PTR.delete(e.pointerId);
+  if(PTR.size < 2) pinch = null;
+  if(PTR.size === 0){ pan = null; H.drag = false; WX.dragSys = false; c3.style.cursor = 'grab'; }
+}
+c3.addEventListener('pointerup', endPtr); c3.addEventListener('pointercancel', endPtr);
+c3.style.cursor = 'grab';
 
+/* --- pornire --- */
+setWind(90, 25);
+setPh('uragan');
+updateTabs();
+openTab(1);
+$('lockmsg').textContent = '';
 loop();
 </script>
 </body>
